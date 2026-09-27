@@ -1528,5 +1528,45 @@
     "name": "王二小(借鉴多仓)",
     "url": "https://cdn.jsdelivr.net/gh/Lightconer/tvbox-ysc-config@main/output/wangerxiao.json",
     "src": "ghagg"
+  },
+  "https://www.ymaoo.cn/1929.html": {
+    "name": "https://www.ymaoo.cn/1929.html",
+    "url": "https://www.ymaoo.cn/1929.html",
+    "src": "external"
+  },
+  "https://www.ymaoo.cn/2952.html": {
+    "name": "https://www.ymaoo.cn/2952.html",
+    "url": "https://www.ymaoo.cn/2952.html",
+    "src": "external"
+  },
+  "https://www.ymaoo.cn/3157.html": {
+    "name": "https://www.ymaoo.cn/3157.html",
+    "url": "https://www.ymaoo.cn/3157.html",
+    "src": "external"
+  },
+  "https://www.ymaoo.cn/1928.html": {
+    "name": "https://www.ymaoo.cn/1928.html",
+    "url": "https://www.ymaoo.cn/1928.html",
+    "src": "external"
+  },
+  "https://www.ymaoo.cn/1072.html": {
+    "name": "https://www.ymaoo.cn/1072.html",
+    "url": "https://www.ymaoo.cn/1072.html",
+    "src": "external"
+  },
+  "https://designshidai.com/29360.html": {
+    "name": "https://designshidai.com/29360.html",
+    "url": "https://designshidai.com/29360.html",
+    "src": "external"
+  },
+  "https://designshidai.com/8918.html": {
+    "name": "https://designshidai.com/8918.html",
+    "url": "https://designshidai.com/8918.html",
+    "src": "external"
+  },
+  "https://designshidai.com/29364.html": {
+    "name": "https://designshidai.com/29364.html",
+    "url": "https://designshidai.com/29364.html",
+    "src": "external"
   }
 }
