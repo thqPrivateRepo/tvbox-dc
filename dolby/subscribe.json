@@ -1,20 +1,18 @@
 {
   "sites": [
     {
-      "key": "DolbyV127",
-      "name": "我的杜比资源站(可搜索)",
+      "key": "DolbyCF01",
+      "name": "我的杜比资源站(云端搜索)",
       "type": 0,
-      "api": "https://xiaohuya520.github.io/tvbox-dc/dolby/catalog.json",
-      "spider": "https://xiaohuya520.github.io/tvbox-dc/dolby/spider.js",
-      "ext": "{\"spider\":\"https://xiaohuya520.github.io/tvbox-dc/dolby/spider.js\",\"urls\":[\"https://xiaohuya520.github.io/tvbox-dc/dolby/catalog.json\",\"https://cdn.jsdelivr.net/gh/xiaohuya520/tvbox-dc@main/dolby/catalog.json\"]}",
+      "api": "https://dolby-search.dolbysearch.workers.dev",
       "searchable": 1,
       "quickSearch": 1,
       "playable": 1,
       "timeout": 15
     },
     {
-      "key": "DolbyV227",
-      "name": "我的杜比资源站(仅浏览)",
+      "key": "DolbyGH01",
+      "name": "我的杜比资源站(纯浏览兜底)",
       "type": 0,
       "api": "https://xiaohuya520.github.io/tvbox-dc/dolby/catalog.json",
       "searchable": 0,
