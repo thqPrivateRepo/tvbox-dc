@@ -30,22 +30,22 @@
 **最可靠方案：Cloudflare 云端搜索代理（✅ 代码已写好在 `cloudflare-worker.js`）**
 把静态 catalog 变成一个真正能在服务端按词过滤的 MacCMS 接口，影视仓用 `type:0` 原生就能搜，
 **完全不碰 JS 蜘蛛、不依赖壳子 JS 支持**。免费、5 分钟部署，纯云端（符合你“不要本机”要求）。
-详见下方「☁ 云端搜索（Cloudflare Worker）」章节——部署后把 Worker 地址发我，我更新订阅推送即可。
+✅ **已自动部署完成**（2026-09-29，Cloudflare API 确认 Worker 在线、子域已绑定），Worker 地址 `https://dolby-search.dolbysearch.workers.dev` 已写入订阅第一站，你重拉订阅即可搜。
 
 > 部署后的预期：影视仓全局搜索或站点内搜「泰坦尼克号」→ 服务端精确返回该条，100% 出结果。
 
-## ☁ 云端搜索（Cloudflare Worker）部署
+## ☁ 云端搜索（Cloudflare Worker）✅ 已部署
 
 代码已在本仓库 `cloudflare-worker.js`。它从 GitHub 拉 `catalog.json`（5 分钟缓存），
 按 `wd` 过滤后返回标准 MacCMS JSON，等价于一个“会搜索的 MacCMS 源”。
 
-**部署步骤（免费）**：
-1. 打开 https://www.cloudflare.com/ 注册 / 登录（免费）
-2. 左侧 **Workers & Pages** → 创建 → **创建 Worker**
-3. 名称填 `dolby-search`，把默认代码**全删**，粘贴 `cloudflare-worker.js` 的全部内容
-4. 点 **部署**
-5. 得到地址：`https://dolby-search.<你的子域>.workers.dev`
-6. 把该地址发我（或直接填进影视仓，见下）
+**✅ 已用 Cloudflare API 自动部署（2026-09-29）**：
+- Worker 名称：`dolby-search`
+- 访问地址：`https://dolby-search.dolbysearch.workers.dev`
+- 订阅第一站已改为 `type:0`、`api=该地址`、去掉 spider 字段（见 `subscribe.json`），重拉订阅即生效。
+- 手动添加：影视仓「站点管理」→ 新增自定义站点 → 类型 `0`、API 填上面地址（**不要加 /dolby 等后缀**）、勾选「可搜索」。
+
+（如需自己重建：代码在 `cloudflare-worker.js`，Cloudflare Workers & Pages 粘贴部署即可。）
 
 **影视仓里怎么用**：
 - 订阅 `subscribe.json` 第一站会被我改成 `type:0`、`api=Worker地址`、去掉 spider 字段，你重拉订阅即生效；
@@ -241,7 +241,7 @@ python server.py --port 9000 # 自定义端口
 | `crawler.py` | 爬虫：支持 `tg_channel`（Telegram原盘频道抓夸克/百度链接）、`maccms`（原盘站过滤）、`dolby_list`（Dolby官方片单+搜源）三种模式 |
 | `spider.js` | TVBox drpy 蜘蛛，读取 catalog.json 当资源站（兼容壳子备选；主搜索已改用云端 Worker） |
 | `cloudflare-worker.js` | ☁ 云端搜索代理：把静态 catalog 变成可过滤的 MacCMS 接口，影视仓 type:0 原生即可搜 |
-| `subscribe.json` | TVBox 站点导入入口（部署 Worker 后第一站改为 type:0 指向 Worker 地址；当前为 type:0+spider 兼容备选） |
+| `subscribe.json` | TVBox 站点导入入口：第一站 `type:0` 指向云端 Worker（可搜索），第二站 `type:0` github.io 静态（纯浏览兜底） |
 | `netdisk_parser.js` | 网盘解析蜘蛛模板（夸克/百度），播放侧需填你的 cookie/接口 |
 | `netdisk_config/server.py` | 本地网盘配置小站后端（复刻 SUN 面板，标准库无依赖） |
 | `netdisk_config/static/` | 配置小站前端页面（index.html + app.js） |
