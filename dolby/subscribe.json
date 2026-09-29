@@ -2,24 +2,35 @@
   "sites": [
     {
       "key": "DolbyCF01",
-      "name": "我的杜比资源站(云端搜索)",
+      "name": "杜比站·云端搜索",
       "type": 0,
       "api": "https://dolby-search.dolbysearch.workers.dev",
       "searchable": 1,
       "quickSearch": 1,
       "playable": 1,
-      "timeout": 15
+      "timeout": 20
+    },
+    {
+      "key": "DolbyJC01",
+      "name": "杜比站·jsDelivr",
+      "type": 0,
+      "api": "https://cdn.jsdelivr.net/gh/xiaohuya520/tvbox-dc@main/dolby/catalog.json",
+      "searchable": 1,
+      "quickSearch": 1,
+      "filterable": 1,
+      "playable": 1,
+      "timeout": 20
     },
     {
       "key": "DolbyGH01",
-      "name": "我的杜比资源站(纯浏览兜底)",
+      "name": "杜比站·github.io",
       "type": 0,
       "api": "https://xiaohuya520.github.io/tvbox-dc/dolby/catalog.json",
-      "searchable": 0,
+      "searchable": 1,
       "quickSearch": 0,
       "filterable": 1,
       "playable": 1,
-      "timeout": 15
+      "timeout": 20
     }
   ]
 }
