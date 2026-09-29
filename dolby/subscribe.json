@@ -1,10 +1,10 @@
 {
   "sites": [
     {
-      "key": "DolbyCF01",
+      "key": "DolbySCF01",
       "name": "杜比站·云端搜索",
       "type": 0,
-      "api": "https://dolby-search.dolbysearch.workers.dev",
+      "api": "https://1306462089-6xqqnokuno.ap-shanghai.tencentscf.com",
       "searchable": 1,
       "quickSearch": 1,
       "playable": 1,
