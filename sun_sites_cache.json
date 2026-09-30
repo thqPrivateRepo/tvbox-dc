@@ -1,6 +1,6 @@
 {
-  "updated": "2026-09-29T20:56:33.738Z",
-  "count": 104,
+  "updated": "2026-09-30T20:55:47.885Z",
+  "count": 103,
   "spider": "https://img.51shazhu.com/autoupload/g1b6f/20260926/lvM0/0X0/09262309.png;md5;abc13beac287a298e6b7ca91af7404cd",
   "extra": {
     "wallpaper": "http://127.0.0.1:9978/proxy?do=wallpaper",
@@ -310,16 +310,6 @@
       "searchable": 1,
       "quickSearch": 1,
       "filterable": 0
-    },
-    {
-      "key": "爱看",
-      "name": "爱看 • APP",
-      "type": 3,
-      "api": "csp_AiKan",
-      "searchable": 1,
-      "quickSearch": 1,
-      "filterable": 1,
-      "ext": "http://43.248.117.123:14680"
     },
     {
       "key": "咕噜",
@@ -735,7 +725,8 @@
       "changeable": 1,
       "ext": {
         "site": [
-          "https://www.hjzhencai.top"
+          "https://www.hjzhencai.top",
+          "https://www.huanjuanwp.shop"
         ]
       },
       "timeout": 60
