@@ -66,6 +66,31 @@ Deno.serve(async (req: Request) => {
     return json({ ok: true, t: Date.now() });
   }
 
+  // TG 频道页面中转：本机在国内直连不到 t.me 时，由这个跑在海外的函数代抓。
+  // 用法：/tg?ch=频道名[&before=消息ID]
+  if (path === "/tg") {
+    const ch = url.searchParams.get("ch");
+    if (!ch) return new Response("missing ch", { status: 400 });
+    let tg = "https://t.me/s/" + encodeURIComponent(ch);
+    const before = url.searchParams.get("before");
+    if (before) tg += "?before=" + before;
+    try {
+      const r = await fetch(tg, {
+        headers: {
+          "user-agent":
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36",
+        },
+        redirect: "follow",
+      });
+      const htmlTxt = await r.text();
+      return new Response(htmlTxt, {
+        headers: { "content-type": "text/html; charset=utf-8" },
+      });
+    } catch (e) {
+      return new Response("tg fetch failed: " + String(e), { status: 502 });
+    }
+  }
+
   const ac = (url.searchParams.get("ac") || "videolist").toLowerCase();
   const wd = (url.searchParams.get("wd") || "").trim();
 
