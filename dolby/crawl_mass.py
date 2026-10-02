@@ -1,24 +1,27 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-crawl_mass.py —— 用 Scrapling 大规模抓取 TG 公开频道的杜比/4K原盘网盘资源。
+crawl_mass.py —— 大规模抓取 TG 公开频道的杜比/4K原盘网盘资源。
 
 核心思路（"巨量"的三个杠杆）：
   1. 【翻页】TG 频道页一次只给最近 ~20 条，必须靠 ?before=<msgid> 一路往前翻历史，
-     这是资源量的决定性因素（首页 6 页 → 60 页，量级差 10 倍）。
+     这是资源量的决定性因素（6 页 → 60 页，量级差 10 倍）。
   2. 【扩源】频道数量从 8 个扩到 20+ 个（夸克/阿里/百度/115 各类网盘频道）。
   3. 【并发】频道之间并发抓取（默认 5 线程，对 4GB 内存友好，不跑浏览器）。
 
-技术上用 Scrapling 的 Fetcher（伪装 Chrome TLS 指纹）发请求，失败自动回退 urllib；
-解析用正则，不依赖浏览器，轻量稳定。
+三种联网方式（t.me 在国内被墙，本机直连通常不通，按需选一种）：
+  A. 直连     ：python crawl_mass.py                               （能直连 t.me 时才有用）
+  B. 本地代理 ：python crawl_mass.py --proxy http://127.0.0.1:7890  （开了 Clash/VPN 时用）
+  C. 境外中转 ：python crawl_mass.py --via https://xxx.deno.dev
+               经已部署的 Deno 函数（跑在海外）代抓 t.me，本机无需翻墙。
+               前提是 deno_search/main.ts 已部署（它带 /tg 中转接口）。
 
-用法（必须在【能上 t.me 的机器】上运行，沙箱网络到不了 t.me）：
-  python crawl_mass.py                  # 默认抓，增量合并进 data/catalog.json
-  python crawl_mass.py --max-pages 80   # 每频道最多翻 80 页
-  python crawl_mass.py --workers 6      # 并发频道数
-  python crawl_mass.py --loose          # 放宽：4K原盘/REMUX 即使没标杜比也收
-  python crawl_mass.py --dry-run        # 只统计不写文件
-  python crawl_mass.py --selftest       # 离线自测解析逻辑（无需网络）
+其它参数：
+  --max-pages N   每频道最多翻多少页（默认 60）
+  --workers N     并发频道数（默认 5）
+  --loose         放宽：4K原盘/REMUX 即使没标杜比也收（量更大、纯度略降）
+  --dry-run       只统计不写文件
+  --selftest      离线自测解析逻辑（无需网络）
 """
 import argparse
 import html as html_mod
@@ -27,6 +30,8 @@ import os
 import re
 import sys
 import time
+import urllib.parse
+import urllib.request
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime
 
@@ -48,6 +53,8 @@ MSG_RE = re.compile(
     r'<div[^>]*class="[^"]*tgme_widget_message[^"]*"[^>]*data-post="[^"]*?/(\d+)"',
     re.I | re.S,
 )
+UA = ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
+      "(KHTML, like Gecko) Chrome/124.0 Safari/537.36")
 
 
 def strip_tags(s):
@@ -62,7 +69,6 @@ def clean_title(text):
     if not lines:
         return ""
     title = lines[0]
-    # 去掉开头的频道标签/序号噪音
     title = re.sub(r"^[\s\-—【\[（(]*[#＃]?[\s]*", "", title)
     title = re.sub(r"\s{2,}", " ", title).strip()
     return title[:120]
@@ -97,13 +103,10 @@ def parse_channel_page(page_html, channel, cfg):
         if not link:
             continue
 
-        # 过滤：原盘/REMUX
         if cfg.get("require_remux", True) and not REMUX_RE.search(blob):
             continue
-        # 过滤：杜比（--loose 时跳过）
         if cfg.get("require_dolby", True) and not DOLBY_RE.search(blob):
             continue
-        # 排除枪版等
         if any(bad in text for bad in cfg.get("drop_keywords", [])):
             continue
 
@@ -113,7 +116,7 @@ def parse_channel_page(page_html, channel, cfg):
 
         feats = []
         if REMUX_RE.search(blob):
-            feats.append("4K原盘" if "原盘" in blob or "2160" in blob.lower() else "蓝光")
+            feats.append("4K原盘" if ("原盘" in blob or "2160" in blob.lower()) else "蓝光")
         if re.search(r"杜比视界|dolby\s*vision", blob, re.I):
             feats.append("杜比视界")
         if re.search(r"杜比全景声|全景声|dolby\s*atmos", blob, re.I):
@@ -135,38 +138,50 @@ def parse_channel_page(page_html, channel, cfg):
     return items, min_id
 
 
-def fetch(url, timeout=25):
-    """发请求：优先 Scrapling（伪装 TLS 指纹），失败回退 urllib。"""
-    ua = ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
-          "(KHTML, like Gecko) Chrome/124.0 Safari/537.36")
-    # 1) Scrapling
-    try:
-        from scrapling.fetchers import Fetcher  # 延迟导入，装不上也能跑
-        page = Fetcher.get(url, impersonate="chrome", timeout=timeout, follow_redirects=True)
-        body = page.html_content
-        if isinstance(body, bytes):
-            body = body.decode("utf-8", "ignore")
-        if body:
-            return body
-    except Exception:
-        pass
-    # 2) urllib 兜底
-    import urllib.request
-    req = urllib.request.Request(url, headers={"User-Agent": ua})
-    with urllib.request.urlopen(req, timeout=timeout) as r:
+def fetch(url, timeout=25, proxy=None):
+    """发请求：无代理时优先 Scrapling（伪装 TLS 指纹）；有代理或失败则 urllib。"""
+    if not proxy:
+        try:
+            from scrapling.fetchers import Fetcher  # 延迟导入，装不上也能跑
+            page = Fetcher.get(url, impersonate="chrome", timeout=timeout, follow_redirects=True)
+            body = page.html_content
+            if isinstance(body, bytes):
+                body = body.decode("utf-8", "ignore")
+            if body:
+                return body
+        except Exception:
+            pass
+    if proxy:
+        op = urllib.request.build_opener(
+            urllib.request.ProxyHandler({"http": proxy, "https": proxy}))
+    else:
+        op = urllib.request.build_opener()
+    op.addheaders = [("User-Agent", UA)]
+    with op.open(url, timeout=timeout) as r:
         return r.read().decode("utf-8", "ignore")
 
 
-def crawl_channel(channel, max_pages, delay, cfg):
+def build_url(channel, before, via):
+    """构造频道页地址：可直连 t.me，也可经 Deno 函数中转。"""
+    if via:
+        u = via.rstrip("/") + "/tg?ch=" + urllib.parse.quote(channel)
+        if before:
+            u += "&before=%d" % before
+        return u
+    u = "https://t.me/s/%s" % channel
+    if before:
+        u += "?before=%d" % before
+    return u
+
+
+def crawl_channel(channel, max_pages, delay, cfg, via=None, proxy=None):
     """串行翻页抓一个频道的历史。"""
     got, before, seen = [], None, set()
     pages_ok = 0
     for _ in range(max_pages):
-        url = "https://t.me/s/%s" % channel
-        if before:
-            url += "?before=%d" % before
+        url = build_url(channel, before, via)
         try:
-            page_html = fetch(url, timeout=cfg.get("timeout", 25))
+            page_html = fetch(url, timeout=cfg.get("timeout", 25), proxy=proxy)
         except Exception as e:
             print("    [%s] 抓取失败: %s" % (channel, str(e)[:80]))
             break
@@ -228,7 +243,6 @@ def merge_into_catalog(new_items, dry_run=False):
         })
         added += 1
 
-    # 重排 vod_id
     for i, it in enumerate(catalog["list"], 1):
         it["vod_id"] = i
     catalog["total"] = len(catalog["list"])
@@ -274,6 +288,8 @@ def main():
     ap.add_argument("--delay", type=float, default=1.0, help="每次翻页间隔秒")
     ap.add_argument("--loose", action="store_true", help="放宽：不强制杜比标注")
     ap.add_argument("--dry-run", action="store_true", help="只统计不写文件")
+    ap.add_argument("--proxy", default=None, help="本地代理，如 http://127.0.0.1:7890（开VPN时用）")
+    ap.add_argument("--via", default=None, help="境外 Deno 函数中转，如 https://xxx.deno.dev")
     ap.add_argument("--selftest", action="store_true", help="离线自测解析逻辑")
     args = ap.parse_args()
 
@@ -294,21 +310,25 @@ def main():
         "timeout": cfg_all.get("crawl", {}).get("timeout", 25),
     }
     channels = src.get("channels", [])
-    print("频道数: %d | 每频道最多 %d 页 | 并发 %d | 杜比严格过滤: %s"
+    mode = ("经 Deno 中转 " + args.via if args.via
+            else ("经代理 " + args.proxy if args.proxy else "直连 t.me"))
+    print("联网方式: %s" % mode)
+    print("频道数: %d | 每频道最多 %d 页 | 并发 %d | 杜比严格过滤: %s\n"
           % (len(channels), args.max_pages, args.workers, cfg["require_dolby"]))
-    print("注：本脚本需要能访问 t.me 的网络环境；沙箱内跑会因网络不通而 0 条。\n")
 
-    all_items, stats = [], {}
+    all_items = []
     with ThreadPoolExecutor(max_workers=args.workers) as ex:
-        futs = {ex.submit(crawl_channel, ch, args.max_pages, args.delay, cfg): ch
-                for ch in channels}
+        futs = {ex.submit(crawl_channel, ch, args.max_pages, args.delay, cfg,
+                          args.via, args.proxy): ch for ch in channels}
         for f in as_completed(futs):
             ch, got, pages = f.result()
-            stats[ch] = (len(got), pages)
             all_items.extend(got)
             print("  [%-22s] 翻 %2d 页 → 命中 %d 条" % (ch, pages, len(got)))
 
     print("\n合计新抓到: %d 条" % len(all_items))
+    if not all_items:
+        print("⚠️  0 条：说明当前联网方式拿不到 t.me 内容，请改用 --proxy 或 --via。")
+        return
     total, added = merge_into_catalog(all_items, dry_run=args.dry_run)
     print("去重后新增: %d 条 | catalog.json 现有总量: %d 条" % (added, total))
     if args.dry_run:
