@@ -63,15 +63,48 @@ def strip_tags(s):
     return html_mod.unescape(s)
 
 
+# 广告/签名行特征词（聚合帖的固定标题会被误当成片名）
+AD_RE = re.compile(
+    r"网盘|分享|集中营|资源库|资源群|频道|群组|导航|电报|合集|整理|持续更新|"
+    r"欢迎|关注|收藏|订阅|@\w+|加群|互助|线路|观影|搜索| robots|免责", re.I)
+YEAR_RE = re.compile(r"(19|20)\d{2}")
+RES_RE = re.compile(r"2160|4K|1080|720|REMUX|原盘|BluRay|UHD|BDMV|蓝光", re.I)
+
+
 def clean_title(text):
-    """从消息正文里提取一个干净的片名。"""
-    lines = [l.strip() for l in text.split("\n") if l.strip()]
+    """从消息正文里提取一个干净的片名。
+
+    很多聚合帖第一条是固定的频道广告语（如「懒狗集中营-115/阿里/百度…影视分享」），
+    真正片名在后面。这里按「像不像片名」打分挑最合适的一行。
+    """
+    lines = [re.sub(r"\s{2,}", " ", l).strip() for l in text.split("\n") if l.strip()]
     if not lines:
         return ""
-    title = lines[0]
-    title = re.sub(r"^[\s\-—【\[（(]*[#＃]?[\s]*", "", title)
-    title = re.sub(r"\s{2,}", " ", title).strip()
-    return title[:120]
+
+    def norm(t):
+        t = re.sub(r"^[\s\-—【\[（(]*[#＃]?[\s]*", "", t)
+        return re.sub(r"\s{2,}", " ", t).strip()[:120]
+
+    def score(l):
+        s = 0
+        if YEAR_RE.search(l):
+            s += 3
+        if RES_RE.search(l):
+            s += 2
+        if AD_RE.search(l):
+            s -= 4          # 广告语/频道签名
+        if len(l) > 90:
+            s -= 3          # 太长基本不是片名
+        if re.match(r"^https?://", l):
+            s -= 5          # 纯链接行
+        return s
+
+    best = max(lines[:12], key=score)
+    title = norm(best)
+    # 实在挑不出来（全是广告语）就用第一行，但截短
+    if not title or AD_RE.search(title) and len(title) > 40:
+        title = norm(lines[0])
+    return title
 
 
 def detect_netdisk(raw_html, text):
@@ -81,6 +114,30 @@ def detect_netdisk(raw_html, text):
         if m:
             return label, m.group(0)
     return None, None
+
+
+def detect_all_netdisks(raw_html, text):
+    """提取一条消息里的【全部】网盘链接。
+
+    聚合分享帖（如 @vip115hot）一条消息常带多个网盘链接，
+    只取第一个会漏掉大量资源。夸克优先（本项目主盘），其余按配置顺序。
+    """
+    found = []
+    for label, pat in NETDISK_PATTERNS:
+        for m in pat.finditer(raw_html):
+            found.append((label, m.group(0)))
+        if not found:
+            for m in pat.finditer(text):
+                found.append((label, m.group(0)))
+    # 去重保序；夸克排前面
+    seen, out = set(), []
+    for label, link in found:
+        if link in seen:
+            continue
+        seen.add(link)
+        out.append((label, link))
+    out.sort(key=lambda x: 0 if x[0] == "夸克网盘" else 1)
+    return out
 
 
 def parse_channel_page(page_html, channel, cfg):
@@ -99,8 +156,9 @@ def parse_channel_page(page_html, channel, cfg):
         text = strip_tags(chunk)
         blob = "\n".join(raw_links) + "\n" + text
 
-        label, link = detect_netdisk(blob, text)
-        if not link:
+        # 一条消息可能带多个网盘链接（聚合分享帖），全部提取
+        pairs = detect_all_netdisks(chunk, text)
+        if not pairs:
             continue
 
         if cfg.get("require_remux", True) and not REMUX_RE.search(blob):
@@ -114,25 +172,29 @@ def parse_channel_page(page_html, channel, cfg):
         if not title or len(title) < 2:
             continue
 
-        feats = []
+        base_feats = []
         if REMUX_RE.search(blob):
-            feats.append("4K原盘" if ("原盘" in blob or "2160" in blob.lower()) else "蓝光")
+            base_feats.append("4K原盘" if ("原盘" in blob or "2160" in blob.lower()) else "蓝光")
         if re.search(r"杜比视界|dolby\s*vision", blob, re.I):
-            feats.append("杜比视界")
+            base_feats.append("杜比视界")
         if re.search(r"杜比全景声|全景声|dolby\s*atmos", blob, re.I):
-            feats.append("杜比全景声")
-        feats.append(label)
+            base_feats.append("杜比全景声")
 
-        items.append({
-            "_msgid": msgid,
-            "vod_name": title,
-            "vod_remarks": "|".join(dict.fromkeys(feats)),
-            "vod_content": "来自 TG 公开频道 @%s 的真实原盘/杜比资源（%s）。" % (channel, label),
-            "vod_play_from": label,
-            "vod_play_url": "正片$" + link,
-            "vod_netdisk": label,
-            "_link": link,
-        })
+        # 每条消息最多取 6 个链接，避免聚合帖刷屏
+        for i, (label, link) in enumerate(pairs[:6]):
+            feats = base_feats + [label]
+            # 同一消息多个盘时用盘名区分，避免影视仓里看起来完全重名
+            name = title if i == 0 else "%s · %s" % (title, label)
+            items.append({
+                "_msgid": msgid,
+                "vod_name": name,
+                "vod_remarks": "|".join(dict.fromkeys(feats)),
+                "vod_content": "来自 TG 公开频道 @%s 的真实原盘/杜比资源（%s）。" % (channel, label),
+                "vod_play_from": label,
+                "vod_play_url": "正片$" + link,
+                "vod_netdisk": label,
+                "_link": link,
+            })
 
     min_id = min(m[1] for m in bounds)
     return items, min_id
@@ -216,9 +278,9 @@ def merge_into_catalog(new_items, dry_run=False):
 
     added = 0
     for it in new_items:
+        # 去重主键 = 网盘链接。不同链接就是不同资源，即使片名相同也要保留
+        # （聚合帖同一条消息常带多个盘的链接，按片名去重会把它全丢光）
         if it["_link"] in existing_links:
-            continue
-        if it["vod_name"].strip() in existing_titles:
             continue
         existing_links.add(it["_link"])
         existing_titles.add(it["vod_name"].strip())
