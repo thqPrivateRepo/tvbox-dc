@@ -4213,6 +4213,13 @@
       "ext": ""
     },
     {
+      "key": "py_花都",
+      "name": "花都影院[py]",
+      "type": 3,
+      "api": "./js/ss/花都影院.py",
+      "ext": ""
+    },
+    {
       "key": "py_Youavhub",
       "name": "Youavhub[py]",
       "type": 3,
