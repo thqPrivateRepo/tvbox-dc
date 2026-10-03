@@ -50,6 +50,26 @@ async function getLogs() {
   return [];
 }
 
+async function logLine(msg) {
+  try {
+    const logs = await getLogs();
+    logs.unshift({ t: new Date().toISOString().slice(11, 19), p: msg, ua: 'note' });
+    await caches.default.put(LOG_URL, new Response(JSON.stringify(logs.slice(0, LOG_MAX)), {
+      headers: { 'Content-Type': 'application/json', 'Cache-Control': 'max-age=31536000' },
+    }));
+  } catch (e) {}
+}
+
+// 取壳子拼进来的分享链接。壳子是【直接拼接】（api 以 ?url= 结尾），且不会 URL 编码，
+// 所以百度那种带 ?pwd= 的链接要原样保留尾部，不能只取 searchParams。
+function extractShareUrl(url) {
+  const s = url.search || '';
+  const i = s.indexOf('url=');
+  let raw = i >= 0 ? s.slice(i + 4) : (url.searchParams.get('url') || '');
+  try { if (/%[0-9A-Fa-f]{2}/.test(raw)) raw = decodeURIComponent(raw); } catch (e) {}
+  return raw.trim();
+}
+
 async function loadCatalog() {
   if (MEM.data && Date.now() - MEM.ts < TTL) return MEM.data;
   for (const u of CATALOG_SOURCES) {
@@ -165,61 +185,106 @@ async function baiduExtractBduss(v) {
   return '';
 }
 
-// ---------------- 解析：夸克（照抄 SUN jar QuarkApi 流程：token→detail→save转存→task轮询→download直链）----------------
+// ---------------- 解析：夸克（按 SUN jar QuarkApi 流程重写：token→detail递归→save转存→task轮询→download直链）----------------
+// 2026-10-03 实测修正三处（都曾导致解析失败）：
+//   ① sharepage/detail 必须 GET —— POST 会被网关拒（405 "Request method 'POST' not supported"）
+//   ② 目录判断用 dir:true / file:true —— file_type 恒为 0，区分不了文件与目录
+//   ③ 令牌字段是 share_fid_token —— fid_token 为 null；且影片常藏在 1~3 层子目录（根目录多是引流图）
 const QUARK_API = 'https://drive-pc.quark.cn/1/clouddrive/';
 const QUARK_PR = 'pr=ucpro&fr=pc';
 const QUARK_UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) quark-cloud-drive/2.5.20 Chrome/100.0.4896.160 Electron/18.3.5.4-b478491100 Safari/537.36 Channel/pckk_other_ch';
+const QUARK_REFERER = 'https://pan.quark.cn/';
 const VIDEO_EXT = /\.(mkv|mp4|ts|m2ts|m2t|avi|wmv|mov|flv|iso|webm|m4v|mpg|mpeg|vob|rmvb)$/i;
 
 function quarkShareId(u) { const m = u.match(/pan\.quark\.cn\/s\/([A-Za-z0-9]+)/); return m ? m[1] : ''; }
 function quarkHeaders(cookie) {
-  return { 'User-Agent': QUARK_UA, 'Referer': 'https://pan.quark.cn/', 'Content-Type': 'application/json', 'Cookie': cookie };
+  const h = { 'User-Agent': QUARK_UA, 'Referer': QUARK_REFERER, 'Content-Type': 'application/json' };
+  if (cookie) h['Cookie'] = cookie;
+  return h;
 }
-async function quarkApi(path, cookie, body, method) {
+async function quarkGet(path, cookie) {
   const u = QUARK_API + path + (path.includes('?') ? '&' : '?') + QUARK_PR;
-  const r = await fetch(u, { method: method || (body ? 'POST' : 'GET'), headers: quarkHeaders(cookie), body: body ? JSON.stringify(body) : undefined });
+  const r = await fetch(u, { headers: quarkHeaders(cookie) });
   return r.json();
 }
-// 返回 {url} 或 {err}
+async function quarkPost(path, cookie, body) {
+  const u = QUARK_API + path + (path.includes('?') ? '&' : '?') + QUARK_PR;
+  const r = await fetch(u, { method: 'POST', headers: quarkHeaders(cookie), body: JSON.stringify(body) });
+  return r.json();
+}
+async function quarkStoken(sid, cookie) {
+  const u = QUARK_API + 'share/sharepage/token?' + QUARK_PR;
+  const r = await fetch(u, { method: 'POST', headers: quarkHeaders(cookie), body: JSON.stringify({ pwd_id: sid, passcode: '' }) });
+  const d = await r.json();
+  return (d && d.data && d.data.stoken) || '';
+}
+async function quarkLs(sid, stoken, pdir, cookie) {
+  const path = 'share/sharepage/detail?'
+    + 'pwd_id=' + encodeURIComponent(sid) + '&stoken=' + encodeURIComponent(stoken)
+    + '&pdir_fid=' + encodeURIComponent(pdir || '0')
+    + '&force=1&_page=1&_size=200&_sort=' + encodeURIComponent('file_type:asc,file_name:asc') + '&_dir=asc';
+  const d = await quarkGet(path, cookie);
+  return (d && d.data && d.data.list) || [];
+}
+// 递归收集视频文件（最多 4 层，避开根目录的引流图）
+async function quarkVideos(sid, stoken, cookie, pdir, depth, acc) {
+  if (depth > 4) return acc;
+  let list = [];
+  try { list = await quarkLs(sid, stoken, pdir, cookie); } catch (e) { return acc; }
+  const dirs = [];
+  for (const f of list) {
+    if (f.dir) { dirs.push(f.fid); continue; }
+    const nm = String(f.file_name || '');
+    if (f.obj_category === 'video' || VIDEO_EXT.test(nm)) {
+      acc.push({ fid: f.fid, token: f.share_fid_token || f.fid_token || '', name: nm, size: f.size || 0 });
+    }
+  }
+  for (const d of dirs) await quarkVideos(sid, stoken, cookie, d, depth + 1, acc);
+  return acc;
+}
+// 返回 {url,name,size} 或 {err}
 async function resolveQuark(shareUrl, cookie, env) {
   const sid = quarkShareId(shareUrl);
   if (!sid) return { err: '不是有效的夸克分享链接' };
   // 0) 直链缓存（30 分钟）：避免重复转存占网盘空间
-  const ck = 'qc:' + sid;
+  const ck = 'qc2:' + sid;
   const cached = await kvGet(env, ck);
-  if (cached) { try { const j = JSON.parse(cached); if (j.url) return { url: j.url }; } catch (e) {} }
+  if (cached) { try { const j = JSON.parse(cached); if (j.url) return { url: j.url, name: j.name || '', size: j.size || 0 }; } catch (e) {} }
   // 1) stoken
-  const t = await quarkApi('share/sharepage/token', cookie, { pwd_id: sid, passcode: '' });
-  const stoken = t && t.data && t.data.stoken;
-  if (!stoken) return { err: '获取stoken失败: ' + ((t && t.message) || '未知') };
-  // 2) 文件列表（取最大的视频文件）
-  const d = await quarkApi('share/sharepage/detail', cookie, { pwd_id: sid, stoken, pdir_fid: '0', force: 1, _page: 1, _size: 100, _sort: 'file_type:asc,file_name:asc', _dir: 'asc' });
-  const list = (d && d.data && d.data.list) || [];
-  if (!list.length) return { err: '分享目录为空或已失效' };
-  const vids = list.filter((f) => f.file_type === 0 && (VIDEO_EXT.test(String(f.file_name || '')) || f.obj_category === 'video'));
-  if (!vids.length) return { err: '分享根目录没有视频文件' + (list.some((f) => f.file_type !== 0) ? '（含子文件夹，暂不支持自动进入）' : '') };
+  const stoken = await quarkStoken(sid, cookie);
+  if (!stoken) return { err: '获取 stoken 失败（分享可能已失效或需要提取码）' };
+  // 2) 递归找视频（取最大的）
+  const vids = await quarkVideos(sid, stoken, cookie, '0', 0, []);
+  if (!vids.length) return { err: '分享里没找到视频文件' };
   const pick = vids.sort((a, b) => (b.size || 0) - (a.size || 0))[0];
+  if (!pick.token) return { err: '视频缺少转存令牌（share_fid_token 为空）' };
   // 3) 转存到自己网盘根目录
-  const s = await quarkApi('share/sharepage/save', cookie, { fid_list: [pick.fid], fid_token_list: [pick.fid_token], to_pdir_fid: '0', pwd_id: sid, stoken, pdir_fid: '0', scene: 'link' });
+  const s = await quarkPost('share/sharepage/save', cookie, {
+    fid_list: [pick.fid], fid_token_list: [pick.token], to_pdir_fid: '0',
+    pwd_id: sid, stoken, pdir_fid: '0', scene: 'link',
+  });
   const taskId = s && s.data && s.data.task_id;
-  if (!taskId) return { err: '转存失败: ' + ((s && s.message) || '未知') + '（检查夸克容量/会员）' };
+  if (!taskId) {
+    const fail = s && s.data && s.data.fail_list ? JSON.stringify(s.data.fail_list).slice(0, 160) : '';
+    return { err: '转存失败：' + ((s && s.message) || fail || '未知') + '（检查夸克容量/会员）' };
+  }
   // 4) 轮询任务拿新 fid
   let newFid = '';
-  for (let i = 0; i < 4 && !newFid; i++) {
+  for (let i = 0; i < 6 && !newFid; i++) {
     await new Promise((r) => setTimeout(r, 1200));
     try {
-      const tr = await quarkApi('task?task_id=' + encodeURIComponent(taskId) + '&retry_index=' + i, cookie, null, 'GET');
+      const tr = await quarkGet('task?task_id=' + encodeURIComponent(taskId) + '&retry_index=' + i, cookie);
       const fids = tr && tr.data && tr.data.save_as && tr.data.save_as.save_as_top_fids;
       if (fids && fids.length) newFid = fids[0];
     } catch (e) {}
   }
-  if (!newFid) return { err: '转存任务未完成（网盘可能空间不足）' };
+  if (!newFid) return { err: '转存任务未完成（网盘空间不足或超时）' };
   // 5) 取下载直链
-  const dl = await quarkApi('file/download', cookie, { fids: [newFid] });
+  const dl = await quarkPost('file/download', cookie, { fids: [newFid] });
   const durl = dl && dl.data && Array.isArray(dl.data) && dl.data[0];
-  if (!durl) return { err: '取直链失败: ' + ((dl && dl.message) || '未知') };
-  await kvPutTtl(env, ck, JSON.stringify({ url: durl }), 1800);
-  return { url: durl };
+  if (!durl) return { err: '取直链失败：' + ((dl && dl.message) || '未知') };
+  await kvPutTtl(env, ck, JSON.stringify({ url: durl, name: pick.name, size: pick.size }), 1800);
+  return { url: durl, name: pick.name, size: pick.size };
 }
 // ---------------- 解析：百度（骨架 + PARSE_API 兜底）----------------
 function baiduSurl(u) { const m = u.match(/pan\.baidu\.com\/s\/([A-Za-z0-9_-]+)/); return m ? m[1] : ''; }
@@ -411,19 +476,24 @@ export default {
     // /papi：TVBox JSON 解析接口（订阅 parses 里 flags=盘名 路由到这里）
     // 返回 {"code":200,"url":直链,"header":{UA/Referer/Cookie}} —— 壳子会带着这些头去播直链
     if (path === '/papi') {
-      const u = url.searchParams.get('url') || '';
+      const u = extractShareUrl(url);
       if (!u) return json({ code: -1, msg: 'missing url' });
       const prov = /pan\.baidu\.com/.test(u) ? 'baidu' : 'quark';
       const cookie = await kvGet(env, prov + '_cookie');
-      if (!cookie) return json({ code: -1, msg: '云端未登录网盘：请用浏览器打开 /login 扫码登录夸克（一次即可）' });
+      await logLine('papi ' + prov + ' u=' + u.slice(0, 70) + ' ck=' + (cookie ? 'Y' : 'N'));
+      if (!cookie) return json({ code: -1, msg: '云端未登录网盘：请用浏览器打开 ' + origin + '/login 扫码登录夸克（一次即可）' });
       try {
         if (prov === 'quark') {
           const r = await resolveQuark(u, cookie, env);
-          if (r.err) return json({ code: -1, msg: r.err });
-          return json({ code: 200, url: r.url, header: { 'User-Agent': QUARK_UA, 'Referer': 'https://pan.quark.cn/', 'Cookie': cookie } });
+          if (r.err) { await logLine('papi quark ERR: ' + r.err); return json({ code: -1, msg: r.err }); }
+          await logLine('papi quark OK size=' + Math.round((r.size || 0) / 1073741824 * 100) / 100 + 'G');
+          // 头部【必须放顶层】：壳子 ParseJob.getHeader() 只读顶层 User-Agent/Referer/Cookie/ua；
+          // 另附一份 nested header 兼容其它分支。
+          const H = { 'User-Agent': QUARK_UA, 'Referer': QUARK_REFERER, 'Cookie': cookie };
+          return json(Object.assign({ code: 200, url: r.url, name: r.name || '', size: r.size || 0, header: H }, H));
         }
         return json({ code: -1, msg: '百度云端解析暂不支持：请用详情页简介里的链接手动转存' });
-      } catch (e) { return json({ code: -1, msg: '解析异常: ' + String(e.message || e) }); }
+      } catch (e) { await logLine('papi EXC: ' + String(e.message || e)); return json({ code: -1, msg: '解析异常: ' + String(e.message || e) }); }
     }
     // /parse：302 直链兜底（播放器不带自定义头，夸克原画可能失败；首选走 /papi）
     if (path === '/parse') {
