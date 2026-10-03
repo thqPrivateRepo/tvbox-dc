@@ -91,6 +91,33 @@ async function tgProxy(ch, before) {
   }
 }
 
+// 网盘分享链接不是视频直链，壳子直接播必然失败。
+// 把链接注入 vod_content，用户在详情页简介里就能看到链接 → 复制到手机/App 转存观看。
+function withLinksInContent(list) {
+  return list.map((it) => {
+    const raw = String(it.vod_play_url || '');
+    if (!raw) return it;
+    const links = raw.split('#').map((seg) => {
+      const i = seg.indexOf('$');
+      return i >= 0 ? seg.slice(i + 1) : seg;
+    }).filter((u) => /^https?:\/\//.test(u));
+    if (!links.length) return it;
+    const tag = links.map((u) => {
+      if (u.includes('pan.quark.cn')) return '夸克: ' + u;
+      if (u.includes('pan.baidu.com')) return '百度: ' + u;
+      if (u.includes('pan.xunlei.com')) return '迅雷: ' + u;
+      if (u.includes('alipan.com') || u.includes('aliyundrive')) return '阿里: ' + u;
+      if (u.includes('189.cn')) return '天翼: ' + u;
+      return '网盘: ' + u;
+    }).join('\n');
+    if (String(it.vod_content || '').indexOf(links[0]) >= 0) return it;
+    return Object.assign({}, it, {
+      vod_content: (it.vod_content ? it.vod_content + '\n\n' : '')
+        + '【网盘链接】复制到浏览器/网盘App打开转存:\n' + tag,
+    });
+  });
+}
+
 export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
@@ -156,6 +183,8 @@ export default {
       return json({ code: 1, msg: 'ok', class: cls, list: [] });
     }
 
+    // 详情模式：把网盘链接注入简介（列表模式保持原样，避免列表页被链接撑爆）
+    if (ac === 'detail') list = withLinksInContent(list);
     return new Response(macCMS(list, pg), { headers: JSON_HEADERS });
   },
 };
