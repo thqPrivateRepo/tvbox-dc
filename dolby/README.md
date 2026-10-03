@@ -6,16 +6,17 @@
 
 ## 成品链接（推送后可用）
 
-**主站点（type:0，云端搜索，✅ 最可靠）**：见下方「☁ 云端搜索（Cloudflare Worker）」——
-部署后由 Cloudflare 在服务端按关键词过滤，影视仓 `type:0` 原生即可搜，**彻底不依赖 JS 蜘蛛**。
+**主站点（type:1，云端搜索，✅ 最可靠）**：见下方「☁ 云端搜索（Cloudflare Pages）」——
+部署后由 Cloudflare 在服务端按关键词过滤，影视仓 `type:1`（JSON 接口）原生即可搜。
+> ⚠️ 关键：订阅接口返回 JSON，必须写 **`type:1`**；写 `type:0`（XML 接口）壳子会用 XML 解析器解 JSON → 列表/搜索全空。
 **兼容备选站点（type:0 + spider.js）**：`spider.js` 走影视仓/猫vod 的 JsLoader，
 在 TVBox 内读取 `catalog.json` 客户端过滤（写法：站点 `type:0` + 顶层 `spider` 字段，
-**不要写 `type:3`**——多数影视仓把 `type:3` 当 jar 包加载 `.js` 会失败）。
+**可以写 `type:3`**——但我们只写 SUN jar 烤死的 `csp_Pan*` 原生类（夸克/百度网盘解析），不写自己写的 JS 蜘蛛（`.js` 壳子不会执行）。subscribe.json 顶层 `spider` 指向 SUN jar 图床即可）。
 **兜底站点（type:0 纯静态，只浏览）**：`catalog.json` 已是 MacCMS 完整格式，
 用来浏览；GitHub Pages 静态无法按词过滤，搜索请用云端 Worker 站点/全局搜索。
 
-- 订阅导入：`https://cdn.jsdelivr.net/gh/xiaohuya520/tvbox-dc@main/dolby/subscribe.json`
-- 目录数据：`https://cdn.jsdelivr.net/gh/xiaohuya520/tvbox-dc@main/dolby/catalog.json`
+- 订阅导入：`https://xiaohuya520.github.io/tvbox-dc/dolby/subscribe.json`（jsDelivr 有 12h 缓存，优先用 github.io/raw）
+- 目录数据：`https://raw.githubusercontent.com/xiaohuya520/tvbox-dc/main/dolby/catalog.json`
 - 蜘蛛脚本：`https://cdn.jsdelivr.net/gh/xiaohuya520/tvbox-dc@main/dolby/spider.js`
 
 ## ★ 搜索到底能不能用（结论 + 最可靠方案）
@@ -24,7 +25,7 @@
 `api?ac=videolist&wd=关键词`，**靠服务器按词过滤返回**。我们的数据放在
 **GitHub Pages（纯静态）**，静态服务器**不会按 `wd` 过滤**，所以静态站天生搜不到。
 之前试过的两条路都死在这：
-- `type:3` + `.js` 链接 → 影视仓把 type:3 当 **jar 包**加载，`.js` 解析失败 → 整站加载不出来；
+- 自己写的 JS drpy 蜘蛛（`netdisk_parser.js`）+ `type:3` → 壳子不会执行自定义 JS 蜘蛛 → 搜索空（**不是 SUN jar 的原生 `csp_Pan*` 类**，那套完全可用）；
 - `type:0` + `spider` 字段（JS 蜘蛛客户端过滤）→ 你的影视仓**没真正执行该蜘蛛的搜索**，列表能看、搜索空。
 
 **最可靠方案：Cloudflare 云端搜索代理（✅ 代码已写好在 `cloudflare-worker.js`）**
@@ -196,19 +197,15 @@ python push_to_github.py
 ```
 若你的杜比源全是 4K原盘网盘，`require_netdisk: true` 最干净。
 
-**② 播放侧（云端直链解析 · 已上线，无需本机部署）**
-网盘分享链接不能直接播。现已把解析逻辑**完整搬到云端 `pages.dev`**（`_worker.js`），影视仓点播放即直链，壳子无需 type:3、全程无本机服务：
+**② 播放侧（照搬 SUN 原生网盘解析 · 主链路）**
+网盘分享链接（`pan.quark.cn/s/xxx` 等）靠**壳子已加载的 SUN jar** 原生解析播放，**不用云端 /parse、不写自定义 JS 蜘蛛**：
 
-- 浏览器打开 **`https://tvbox-dolby-search.pages.dev/login`**（复刻 SUN 面板）→ 选「夸克网盘」→「获取二维码」→ 用**夸克 App** 扫码 → 确认后 cookie 自动存云端 KV。
-- 自动提取 `ck` 失败时用面板里「手动粘贴 ck」兜底，效果一样。
-- 之后影视仓里点任意夸克资源「正片」→ 云端用 cookie 调 `drive.quark.cn` 拿在线播放直链 → 直接播。
-- 换/清 cookie：面板「清除 Cookie」即可。cookie 仅存云端 KV，不进代码/聊天/GitHub。
-- 百度暂仅骨架 + 可选 `PARSE_API` 兜底（夸克为主；百度资源仍走详情页链接转存）。
+- 机制：`subscribe.json` 顶层已加 `spider`（指向 SUN jar 图床 `img.51shazhu.com`）+ 5 个 `type:3` 网盘站点（`夸克网盘`→`csp_PanQuark`、`百度网盘`→`csp_PanBaidu`、`迅雷网盘`→`csp_PanXunlei`、`阿里网盘`→`csp_PanAli`、`天翼网盘`→`csp_PanTianyi`）。catalog 的 `vod_play_from` 正是这 5 个值、`vod_play_url`=`正片$<分享链接>`，`csp_PanQuark` 直接用壳子里已设好的夸克/百度 cookie 解析成直链播放。
+- **前置：夸克/百度 cookie 必须在壳子里设好**（经 SUN 配置·中心，你本来就在用 SUN，已设过）。`csp_Pan*` 读壳子全局 cookie 存储，与云端 KV 是两套独立存储。
+- 影视仓重拉订阅后，源列表里会多出"夸克·网盘 / 百度·网盘 / …"5 个站点（SUN jar 自动加载），点杜比站资源的「正片」即原生播放。
 
-> 未扫码登录前，播放保持「详情页简介给链接、手动转存」旧路径（向后兼容）；扫码后 detail 的 `vod_play_url` 自动改写成云端 `/parse` 地址，无需改订阅。
-
-**③ 本地兜底（可选）**
-`netdisk_config/server.py` 仍保留：本地 `python server.py` 起面板，扫码拿 cookie 后**手动粘贴到云端 /login 的「手动粘贴 ck」**即可（适合云端扫码因网络/接口临时异常时）。主链路已是纯云端 `/login`，通常无需本机运行。
+**③ 云端 /parse（仅兜底，可选）**
+若壳子没载 SUN jar / 没设 cookie，可走云端兜底：浏览器开 `https://tvbox-dolby-search.pages.dev/login` 扫码登录夸克 → 云端 `/parse` 用 KV 里的 cookie 调 `drive.quark.cn` 拿直链 302。这是**降级方案**，正常情况用 ② 的原生解析即可。本地 `netdisk_config/server.py` 仍保留作扫码兜底。
 
 ## 文件说明
 | 文件 | 作用 |
@@ -216,8 +213,8 @@ python push_to_github.py
 | `config.json` | 源地址 + 杜比关键词 + GitHub 目标 |
 | `crawler.py` | 爬虫：支持 `tg_channel`（Telegram原盘频道抓夸克/百度链接）、`maccms`（原盘站过滤）、`dolby_list`（Dolby官方片单+搜源）三种模式 |
 | `spider.js` | TVBox drpy 蜘蛛，读取 catalog.json 当资源站（兼容壳子备选；主搜索已改用云端 Worker） |
-| `cloudflare-worker.js` | ☁ 云端搜索代理：把静态 catalog 变成可过滤的 MacCMS 接口，影视仓 type:0 原生即可搜 |
-| `subscribe.json` | TVBox 站点导入入口：第一站 `type:0` 指向云端 Worker（可搜索），第二站 `type:0` github.io 静态（纯浏览兜底） |
+| `pages_app/_worker.js` | ☁ 云端搜索代理（Cloudflare Pages）：把静态 catalog 变成可过滤的 MacCMS 接口（type:1 JSON），并含 /log 诊断、/tg 海外代抓、/parse 兜底 |
+| `subscribe.json` | TVBox 站点导入入口：杜比站·云端搜索(type:1, pages.dev, 可搜) + 2 静态浏览源 + 顶层 `spider`(SUN jar) + 5 个 type:3 网盘站点(csp_Pan*) |
 | `netdisk_parser.js` | 网盘解析蜘蛛模板（夸克/百度），播放侧需填你的 cookie/接口 |
 | `netdisk_config/server.py` | 本地网盘配置小站后端（复刻 SUN 面板，标准库无依赖） |
 | `netdisk_config/static/` | 配置小站前端页面（index.html + app.js） |
