@@ -1,4 +1,5 @@
 {
+  "spider": "https://img.51shazhu.com/autoupload/g1b6f/20260925/8IU8/0X0/09251937.png;md5;6b9c6a14398f00b90d7dfac3d0129b6f",
   "sites": [
     {
       "key": "DolbyPG01",
@@ -32,6 +33,51 @@
       "filterable": 1,
       "playable": 1,
       "timeout": 20
+    },
+    {
+      "key": "夸克网盘",
+      "name": "夸克 • 网盘",
+      "type": 3,
+      "api": "csp_PanQuark",
+      "searchable": 0,
+      "filterable": 0,
+      "changeable": 0
+    },
+    {
+      "key": "百度网盘",
+      "name": "百度 • 网盘",
+      "type": 3,
+      "api": "csp_PanBaidu",
+      "searchable": 0,
+      "filterable": 0,
+      "changeable": 0
+    },
+    {
+      "key": "迅雷网盘",
+      "name": "迅雷 • 网盘",
+      "type": 3,
+      "api": "csp_PanXunlei",
+      "searchable": 0,
+      "filterable": 0,
+      "changeable": 0
+    },
+    {
+      "key": "阿里网盘",
+      "name": "阿里 • 网盘",
+      "type": 3,
+      "api": "csp_PanAli",
+      "searchable": 0,
+      "filterable": 0,
+      "changeable": 0
+    },
+    {
+      "key": "天翼网盘",
+      "name": "天翼 • 网盘",
+      "type": 3,
+      "api": "csp_PanTianyi",
+      "searchable": 0,
+      "filterable": 0,
+      "changeable": 0
     }
   ]
 }
