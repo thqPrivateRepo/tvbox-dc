@@ -196,43 +196,19 @@ python push_to_github.py
 ```
 若你的杜比源全是 4K原盘网盘，`require_netdisk: true` 最干净。
 
-**② 播放侧（需你的网盘凭据）**
-网盘分享链接不能直接播，要在 TVBox 里配「网盘解析」。本仓库给了
-`netdisk_parser.js`（drpy 蜘蛛，已实装解析逻辑）：
-- 在 TVBox 添加两个「网盘」站点，key 分别填 `夸克网盘`、`百度网盘`，
-  `api` 都指向 `netdisk_parser.js`，`ext` 填
-  `{"quark":"你的夸克ck","baidu":"你的BDUSS","parseApi":"可选百度解析接口"}`。
-  （cookie 也可直接写死在 `netdisk_parser.js` 顶部的 `QUARK_COOKIE`/`BAIDU_BDUSS` 常量里。）
-- **夸克**：纯 cookie 走官方分享接口即可拿到在线播放直链，已实装可用。
-- **百度**：分享下载带签名校验，纯 cookie 在客户端蜘蛛里较脆。已实装接口骨架，
-  但需你确认 `BAIDU_SIGN_KEY`（签名密钥，随版本变）；最稳的做法是给百度填
-  `PARSE_API`（第三方解析接口），留空 `BAIDU_SIGN_KEY` 时百度自动走 `PARSE_API`。
-  只想用夸克、百度暂不解析：留空百度相关即可。
+**② 播放侧（云端直链解析 · 已上线，无需本机部署）**
+网盘分享链接不能直接播。现已把解析逻辑**完整搬到云端 `pages.dev`**（`_worker.js`），影视仓点播放即直链，壳子无需 type:3、全程无本机服务：
 
-> 没配网盘解析前，资源站里的网盘链接只会显示、点不开——这是正常的，
-> 配好 `netdisk_parser.js`（填你的 cookie 或解析接口）即恢复播放。
-> 注意：cookie/BDUSS 是敏感凭据，**不要在聊天里发给我**，本地填文件或 TVBox ext 即可。
+- 浏览器打开 **`https://tvbox-dolby-search.pages.dev/login`**（复刻 SUN 面板）→ 选「夸克网盘」→「获取二维码」→ 用**夸克 App** 扫码 → 确认后 cookie 自动存云端 KV。
+- 自动提取 `ck` 失败时用面板里「手动粘贴 ck」兜底，效果一样。
+- 之后影视仓里点任意夸克资源「正片」→ 云端用 cookie 调 `drive.quark.cn` 拿在线播放直链 → 直接播。
+- 换/清 cookie：面板「清除 Cookie」即可。cookie 仅存云端 KV，不进代码/聊天/GitHub。
+- 百度暂仅骨架 + 可选 `PARSE_API` 兜底（夸克为主；百度资源仍走详情页链接转存）。
 
-**③ 网盘配置小站（复刻 SUN 面板，推荐用来拿 cookie）**
-不想手动抓 cookie？本仓库自带一个本地 Web 小站 `netdisk_config/`，
-界面和 SUN 的网盘配置面板一致，用来管 cookie / 扫码登录 / 清晰度 / 线程数：
+> 未扫码登录前，播放保持「详情页简介给链接、手动转存」旧路径（向后兼容）；扫码后 detail 的 `vod_play_url` 自动改写成云端 `/parse` 地址，无需改订阅。
 
-- **清除 Cookie**：一键清掉夸克或百度的登录态。
-- **二维码扫码登录**：点「获取二维码」，用**夸克 App** 或**百度网盘 App** 扫一下，
-  后端自动轮询，确认后把 cookie 存本地（百度端到端拿 BDUSS；夸克到「已确认」后
-  尝试自动提 `ck`，若夸克接口临时调整，用页面里的「手动粘贴 ck」兜底，效果一样）。
-- **网盘清晰度**：原画 / 超清1080P / 高清720P / 标清。
-- **线程数**：16 / 32 / 64（解析/下载并发）。
-
-运行：
-```bash
-cd netdisk_config
-python server.py              # 默认 http://127.0.0.1:8777
-python server.py --port 9000 # 自定义端口
-```
-浏览器打开后选网盘 → 获取二维码 → 扫码 → 点「生成 ext」，把出来的 JSON
-粘到 TVBox 对应网盘站点的 `ext` 里即可。`netdisk_config/settings.json`
-只存本机、**不会上传 GitHub**（推送脚本已排除）。
+**③ 本地兜底（可选）**
+`netdisk_config/server.py` 仍保留：本地 `python server.py` 起面板，扫码拿 cookie 后**手动粘贴到云端 /login 的「手动粘贴 ck」**即可（适合云端扫码因网络/接口临时异常时）。主链路已是纯云端 `/login`，通常无需本机运行。
 
 ## 文件说明
 | 文件 | 作用 |
