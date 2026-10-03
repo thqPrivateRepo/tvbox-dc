@@ -134,17 +134,40 @@ async function quarkPoll(token, request_id) {
   if (ns === 2) return { st: 'scanned', ticket: '' };
   return { st: 'waiting', ticket: '' };
 }
-async function quarkExtractCookie() {
-  let ck = '';
+function setCookieList(headers) {
+  let sc = [];
   try {
-    const r1 = await fetch('https://pan.quark.cn/account/info', { headers: { 'Referer': 'https://pan.quark.cn/', 'User-Agent': UA } });
-    const set1 = r1.headers.get('set-cookie') || '';
-    if (set1) ck = set1.split(';')[0];
-    const r2 = await fetch('https://drive-pc.quark.cn/1/clouddrive/config', { headers: { 'Referer': 'https://drive-pc.quark.cn/', 'User-Agent': UA } });
-    const set2 = r2.headers.get('set-cookie') || '';
-    if (set2) ck = (ck ? ck + '; ' : '') + set2.split(';').map(s => s.split(';')[0]).join('; ');
+    if (typeof headers.getSetCookie === 'function') sc = headers.getSetCookie() || [];
   } catch (e) {}
-  return ck;
+  if (!sc.length) {
+    const h = headers.get('set-cookie');
+    if (h) sc = h.split(/,(?=[^;,=]+=)/);
+  }
+  return sc;
+}
+// 用扫码得到的 serviceTicket 兑换登录 cookie（关键：不做这一步，云端拿到的只是匿名会话）
+async function quarkExtractCookie(ticket) {
+  const kv = {};
+  const push = (headers) => {
+    for (const line of setCookieList(headers)) {
+      const first = String(line).split(';')[0];
+      const i = first.indexOf('=');
+      if (i > 0) kv[first.slice(0, i).trim()] = first.slice(i + 1).trim();
+    }
+  };
+  try {
+    const url = 'https://pan.quark.cn/account/info?st=' + encodeURIComponent(ticket || '') + '&lw=scan&fr=pc&platform=pc';
+    const r = await fetch(url, { headers: { 'User-Agent': QUARK_UA, 'Referer': 'https://pan.quark.cn/', 'Origin': 'https://pan.quark.cn' }, redirect: 'manual' });
+    push(r.headers);
+  } catch (e) {}
+  if (!Object.keys(kv).length) {
+    try {
+      const r2 = await fetch('https://drive-pc.quark.cn/1/clouddrive/config?pr=ucpro&fr=pc', { headers: { 'User-Agent': QUARK_UA, 'Referer': 'https://pan.quark.cn/' } });
+      push(r2.headers);
+    } catch (e) {}
+  }
+  const parts = Object.entries(kv).map(([k, v]) => k + '=' + v);
+  return parts.join('; ');
 }
 
 // ---------------- 百度扫码 ----------------
@@ -456,7 +479,13 @@ export default {
       try {
         if (prov === 'quark') {
           const st = await quarkPoll(p.token, p.request_id);
-          if (st.st === 'confirmed') { const ck = await quarkExtractCookie(); if (ck) await kvPut(env, 'quark_cookie', ck); return json({ status: 'confirmed', message: '扫码成功' + (ck ? '（已自动提取ck）' : '（请手动粘贴ck）') }); }
+          if (st.st === 'confirmed') {
+            const ck = await quarkExtractCookie(st.ticket);
+            const good = ck && ck.length > 20 && /__pus|__puus|__uid/.test(ck);
+            if (good) await kvPut(env, 'quark_cookie', ck);
+            await logLine('qr quark confirmed ck=' + (good ? 'OK(' + ck.length + ')' : 'EMPTY(ticket=' + (st.ticket ? 'Y' : 'N') + ')'));
+            return json({ status: 'confirmed', message: good ? '扫码成功，已自动保存 cookie' : '扫码成功，但自动提取失败：请用下方「手动粘贴 ck」保存' });
+          }
           return json({ status: st.st === 'scanned' ? 'scanned' : 'waiting', message: st.st === 'scanned' ? '已扫描，请在手机确认' : '等待扫码…' });
         }
         if (prov === 'baidu') {
