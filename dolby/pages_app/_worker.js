@@ -8,13 +8,16 @@
 //   5) /login                         云端网盘配置面板（复刻 SUN，扫码登录拿 cookie）
 //   6) /api/qr/start|status           夸克/百度扫码登录（无状态，参数由前端回传）
 //   7) /api/cookie/get|save|clear     cookie 读写清（存 KV，绝不进代码/聊天/GitHub）
-//   8) /parse?url=分享链接             服务端用 cookie 把夸克/百度分享链接换成在线播放直链（302）
-//   9) detail 把网盘链接注入 vod_content 简介（便于手动转存兜底）
+//   8) /parse?url=分享链接             服务端解析成直链并 302（兜底）
+//   9) /papi?url=分享链接              ★JSON 解析接口（type:1 解析）：返回 {"code":200,"url":直链,"header":{UA/Referer/Cookie}}
+//  10) detail 把网盘链接注入 vod_content 简介（手动转存兜底）
 //
-// 播放策略：catalog 的 vod_play_url 是原始网盘分享链接，交给影视仓已加载的 SUN jar
-//          （csp_PanQuark/csp_PanBaidu…）原生解析，复用壳子里已设好的夸克/百度 cookie。
-//          云端 /parse 仅作为未设 cookie 时的兜底入口，默认不走它。
-// 注意：_worker.js 接管全部请求；cookie 存 KV，解析出网走 drive.quark.cn / pan.baidu.com。
+// 播放策略（2026-10-03 定案）：type:1 站点返回裸网盘链接时壳子【不会】调 jar 的 csp_Pan* 类
+//   （FongMi 源码实证：壳子本体无任何网盘代码，网盘解析只发生在 type:3 spider 类内部）。
+//   正确机制 = 订阅 parses 里加 flags=盘名 的 JSON 解析入口 → 壳子播「夸克网盘」组时自动调
+//   /papi 换直链并带上夸克专用 UA 头（与 SUN jar 的 QuarkApi 同款流程：转存→download→带 UA 播放）。
+//   云端 cookie 需在 /login 扫码存 KV（与壳子内的 cookie 是两套独立存储）。
+// 注意：_worker.js 接管全部请求；cookie 存 KV，解析出网走 drive-pc.quark.cn / pan.baidu.com。
 
 const CATALOG_SOURCES = [
   'https://raw.githubusercontent.com/xiaohuya520/tvbox-dc/main/dolby/catalog.json',
@@ -36,6 +39,9 @@ async function kvGet(env, k) {
 }
 async function kvPut(env, k, v) {
   try { await env.KV.put(k, v); return true; } catch (e) { return false; }
+}
+async function kvPutTtl(env, k, v, ttlSec) {
+  try { await env.KV.put(k, v, { expirationTtl: ttlSec }); return true; } catch (e) { return false; }
 }
 
 // ---------------- 日志 ----------------
@@ -159,21 +165,61 @@ async function baiduExtractBduss(v) {
   return '';
 }
 
-// ---------------- 解析：夸克 ----------------
+// ---------------- 解析：夸克（照抄 SUN jar QuarkApi 流程：token→detail→save转存→task轮询→download直链）----------------
+const QUARK_API = 'https://drive-pc.quark.cn/1/clouddrive/';
+const QUARK_PR = 'pr=ucpro&fr=pc';
+const QUARK_UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) quark-cloud-drive/2.5.20 Chrome/100.0.4896.160 Electron/18.3.5.4-b478491100 Safari/537.36 Channel/pckk_other_ch';
+const VIDEO_EXT = /\.(mkv|mp4|ts|m2ts|m2t|avi|wmv|mov|flv|iso|webm|m4v|mpg|mpeg|vob|rmvb)$/i;
+
 function quarkShareId(u) { const m = u.match(/pan\.quark\.cn\/s\/([A-Za-z0-9]+)/); return m ? m[1] : ''; }
-async function parseQuark(shareUrl, cookie, quality) {
+function quarkHeaders(cookie) {
+  return { 'User-Agent': QUARK_UA, 'Referer': 'https://pan.quark.cn/', 'Content-Type': 'application/json', 'Cookie': cookie };
+}
+async function quarkApi(path, cookie, body, method) {
+  const u = QUARK_API + path + (path.includes('?') ? '&' : '?') + QUARK_PR;
+  const r = await fetch(u, { method: method || (body ? 'POST' : 'GET'), headers: quarkHeaders(cookie), body: body ? JSON.stringify(body) : undefined });
+  return r.json();
+}
+// 返回 {url} 或 {err}
+async function resolveQuark(shareUrl, cookie, env) {
   const sid = quarkShareId(shareUrl);
-  if (!sid || !cookie) return '';
-  const h = { 'Content-Type': 'application/json', 'cookie': cookie, 'X-Device-Id': QUARK_DEV, 'X-Platform': 'web', 'User-Agent': UA, 'Origin': 'https://pan.quark.cn', 'Referer': 'https://pan.quark.cn/' };
-  try {
-    let r = await fetch('https://drive.quark.cn/1/clouddrive/share/sharepage/token', { method: 'POST', headers: h, body: JSON.stringify({ pwd_id: sid, passcode: '' }) });
-    const t = await r.json(); const stoken = t.data && t.data.stoken; if (!stoken) return '';
-    r = await fetch('https://drive.quark.cn/1/clouddrive/share/sharepage/detail', { method: 'POST', headers: h, body: JSON.stringify({ pwd_id: sid, stoken, pdir_fid: '0', force: 1, _page: 1, _size: 100, _sort: 'file_name', _dir: 'asc' }) });
-    const d = await r.json(); const list = (d.data && d.data.list) || []; if (!list.length) return '';
-    const f = list[0];
-    r = await fetch('https://drive.quark.cn/1/clouddrive/file/play', { method: 'POST', headers: h, body: JSON.stringify({ fid: f.fid, fid_token: f.fid_token, open_api_ext: { media_bandwidth: '/^$/' }, res_type: 1, play_type: 'online', quality: quality || '原画' }) });
-    const p = await r.json(); return (p.data && (p.data.play_url || p.data.video_preview_url)) || '';
-  } catch (e) { return ''; }
+  if (!sid) return { err: '不是有效的夸克分享链接' };
+  // 0) 直链缓存（30 分钟）：避免重复转存占网盘空间
+  const ck = 'qc:' + sid;
+  const cached = await kvGet(env, ck);
+  if (cached) { try { const j = JSON.parse(cached); if (j.url) return { url: j.url }; } catch (e) {} }
+  // 1) stoken
+  const t = await quarkApi('share/sharepage/token', cookie, { pwd_id: sid, passcode: '' });
+  const stoken = t && t.data && t.data.stoken;
+  if (!stoken) return { err: '获取stoken失败: ' + ((t && t.message) || '未知') };
+  // 2) 文件列表（取最大的视频文件）
+  const d = await quarkApi('share/sharepage/detail', cookie, { pwd_id: sid, stoken, pdir_fid: '0', force: 1, _page: 1, _size: 100, _sort: 'file_type:asc,file_name:asc', _dir: 'asc' });
+  const list = (d && d.data && d.data.list) || [];
+  if (!list.length) return { err: '分享目录为空或已失效' };
+  const vids = list.filter((f) => f.file_type === 0 && (VIDEO_EXT.test(String(f.file_name || '')) || f.obj_category === 'video'));
+  if (!vids.length) return { err: '分享根目录没有视频文件' + (list.some((f) => f.file_type !== 0) ? '（含子文件夹，暂不支持自动进入）' : '') };
+  const pick = vids.sort((a, b) => (b.size || 0) - (a.size || 0))[0];
+  // 3) 转存到自己网盘根目录
+  const s = await quarkApi('share/sharepage/save', cookie, { fid_list: [pick.fid], fid_token_list: [pick.fid_token], to_pdir_fid: '0', pwd_id: sid, stoken, pdir_fid: '0', scene: 'link' });
+  const taskId = s && s.data && s.data.task_id;
+  if (!taskId) return { err: '转存失败: ' + ((s && s.message) || '未知') + '（检查夸克容量/会员）' };
+  // 4) 轮询任务拿新 fid
+  let newFid = '';
+  for (let i = 0; i < 4 && !newFid; i++) {
+    await new Promise((r) => setTimeout(r, 1200));
+    try {
+      const tr = await quarkApi('task?task_id=' + encodeURIComponent(taskId) + '&retry_index=' + i, cookie, null, 'GET');
+      const fids = tr && tr.data && tr.data.save_as && tr.data.save_as.save_as_top_fids;
+      if (fids && fids.length) newFid = fids[0];
+    } catch (e) {}
+  }
+  if (!newFid) return { err: '转存任务未完成（网盘可能空间不足）' };
+  // 5) 取下载直链
+  const dl = await quarkApi('file/download', cookie, { fids: [newFid] });
+  const durl = dl && dl.data && Array.isArray(dl.data) && dl.data[0];
+  if (!durl) return { err: '取直链失败: ' + ((dl && dl.message) || '未知') };
+  await kvPutTtl(env, ck, JSON.stringify({ url: durl }), 1800);
+  return { url: durl };
 }
 // ---------------- 解析：百度（骨架 + PARSE_API 兜底）----------------
 function baiduSurl(u) { const m = u.match(/pan\.baidu\.com\/s\/([A-Za-z0-9_-]+)/); return m ? m[1] : ''; }
@@ -362,15 +408,33 @@ export default {
     }
 
     // === 解析接口 ===
+    // /papi：TVBox JSON 解析接口（订阅 parses 里 flags=盘名 路由到这里）
+    // 返回 {"code":200,"url":直链,"header":{UA/Referer/Cookie}} —— 壳子会带着这些头去播直链
+    if (path === '/papi') {
+      const u = url.searchParams.get('url') || '';
+      if (!u) return json({ code: -1, msg: 'missing url' });
+      const prov = /pan\.baidu\.com/.test(u) ? 'baidu' : 'quark';
+      const cookie = await kvGet(env, prov + '_cookie');
+      if (!cookie) return json({ code: -1, msg: '云端未登录网盘：请用浏览器打开 /login 扫码登录夸克（一次即可）' });
+      try {
+        if (prov === 'quark') {
+          const r = await resolveQuark(u, cookie, env);
+          if (r.err) return json({ code: -1, msg: r.err });
+          return json({ code: 200, url: r.url, header: { 'User-Agent': QUARK_UA, 'Referer': 'https://pan.quark.cn/', 'Cookie': cookie } });
+        }
+        return json({ code: -1, msg: '百度云端解析暂不支持：请用详情页简介里的链接手动转存' });
+      } catch (e) { return json({ code: -1, msg: '解析异常: ' + String(e.message || e) }); }
+    }
+    // /parse：302 直链兜底（播放器不带自定义头，夸克原画可能失败；首选走 /papi）
     if (path === '/parse') {
       const u = url.searchParams.get('url') || '';
-      const prov = url.searchParams.get('prov') || (/pan\.baidu\.com/.test(u) ? 'baidu' : 'quark');
       if (!u) return json({ error: 'missing url' }, 400);
+      const prov = url.searchParams.get('prov') || (/pan\.baidu\.com/.test(u) ? 'baidu' : 'quark');
       const cookie = prov === 'quark' ? await kvGet(env, 'quark_cookie') : await kvGet(env, 'baidu_cookie');
       if (!cookie) return new Response('未配置' + (prov === 'quark' ? '夸克' : '百度') + ' cookie，请先到 /login 扫码登录', { status: 200, headers: { 'Content-Type': 'text/plain; charset=utf-8' } });
       let play = '';
       try {
-        if (prov === 'quark') play = await parseQuark(u, cookie, '原画');
+        if (prov === 'quark') { const r = await resolveQuark(u, cookie, env); play = r.url || ''; }
         else play = await parseBaidu(u, cookie, await kvGet(env, 'baidu_parse_api'));
       } catch (e) {}
       if (!play) return new Response('解析失败（cookie 可能过期或不支持），请用详情页链接手动转存', { status: 200, headers: { 'Content-Type': 'text/plain; charset=utf-8' } });
@@ -404,8 +468,7 @@ export default {
     }
 
     // detail：仅把网盘链接注入简介（便于手动转存兜底）。
-    // play_url 保持原始分享链接，交给影视仓已加载的 SUN jar（csp_PanQuark/csp_PanBaidu…）原生解析播放，
-    // 不再改写成 /parse（原生机制已覆盖，且复用壳子里已设好的夸克/百度 cookie）。
+    // play_url 保持原始分享链接；播放靠订阅 parses 里 flags=盘名 的 JSON 解析入口路由到 /papi。
     if (ac === 'detail') {
       list = withLinksInContent(list);
     }
