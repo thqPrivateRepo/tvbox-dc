@@ -2,18 +2,7 @@
   "sites": [
     {
       "key": "DolbyPG01",
-      "name": "杜比站·云端搜索A",
-      "type": 0,
-      "api": "https://tvbox-dolby-search.pages.dev",
-      "searchable": 1,
-      "quickSearch": 1,
-      "filterable": 1,
-      "playable": 1,
-      "timeout": 20
-    },
-    {
-      "key": "DolbyPG02",
-      "name": "杜比站·云端搜索B",
+      "name": "杜比站·云端搜索",
       "type": 1,
       "api": "https://tvbox-dolby-search.pages.dev",
       "searchable": 1,
@@ -25,7 +14,7 @@
     {
       "key": "DolbyJC01",
       "name": "杜比站·jsDelivr(浏览)",
-      "type": 0,
+      "type": 1,
       "api": "https://cdn.jsdelivr.net/gh/xiaohuya520/tvbox-dc@main/dolby/catalog.json",
       "searchable": 0,
       "quickSearch": 0,
@@ -36,7 +25,7 @@
     {
       "key": "DolbyGH01",
       "name": "杜比站·github.io(浏览)",
-      "type": 0,
+      "type": 1,
       "api": "https://xiaohuya520.github.io/tvbox-dc/dolby/catalog.json",
       "searchable": 0,
       "quickSearch": 0,
