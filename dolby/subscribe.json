@@ -13,7 +13,8 @@
    "quickSearch": 1,
    "filterable": 1,
    "playable": 1,
-   "timeout": 20
+   "timeout": 20,
+   "playUrl": "json:https://tvbox-dolby-search.pages.dev/papi?url="
   },
   {
    "key": "配置中心",
