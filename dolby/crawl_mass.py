@@ -41,11 +41,12 @@ CATALOG_PATH = os.path.join(BASE, "data", "catalog.json")
 
 # ---------------------------------------------------------------- 网盘识别
 NETDISK_PATTERNS = [
+    # 标签必须与 SUN jar 网盘站点的 key 完全一致（阿里云盘/迅雷云盘/天翼云盘），否则壳子路由不到 csp_Pan* 类
     ("夸克网盘", re.compile(r"https?://pan\.quark\.cn/s/[A-Za-z0-9]+")),
     ("百度网盘", re.compile(r"https?://pan\.baidu\.com/s/[A-Za-z0-9_\-]+(?:\?pwd=[A-Za-z0-9]+)?")),
-    ("阿里网盘", re.compile(r"https?://(?:www\.)?(?:alipan\.com|aliyundrive\.com)/s/[A-Za-z0-9]+")),
-    ("迅雷网盘", re.compile(r"https?://pan\.xunlei\.com/s/[A-Za-z0-9\-]+")),
-    ("天翼网盘", re.compile(r"https?://cloud\.189\.cn/t/[A-Za-z0-9]+")),
+    ("阿里云盘", re.compile(r"https?://(?:www\.)?(?:alipan\.com|aliyundrive\.com)/s/[A-Za-z0-9]+")),
+    ("迅雷云盘", re.compile(r"https?://pan\.xunlei\.com/s/[A-Za-z0-9\-]+")),
+    ("天翼云盘", re.compile(r"https?://cloud\.189\.cn/t/[A-Za-z0-9]+")),
 ]
 REMUX_RE = re.compile(r"原盘|REMUX|remux|Remux|BluRay|blu-ray|蓝光|UHD|uhd|2160[Pp]|4K原盘|BDMV", re.I)
 DOLBY_RE = re.compile(r"杜比视界|杜比全景声|杜比[Dd]olby|dolby\s*vision|dolby\s*atmos|全景声|视界版|杜比版|杜比", re.I)
