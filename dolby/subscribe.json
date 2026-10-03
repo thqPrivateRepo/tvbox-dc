@@ -9,6 +9,7 @@
       "name": "杜比•原盘",
       "type": 1,
       "api": "https://tvbox-dolby-search.pages.dev",
+      "playUrl": "json:https://tvbox-dolby-search.pages.dev/papi?url=",
       "searchable": 1,
       "quickSearch": 1,
       "filterable": 1,
@@ -392,7 +393,15 @@
     "芒 果 T V",
     "bilibili",
     "哔 哩",
-    "哔 哩 哔 哩"
+    "哔 哩 哔 哩",
+    "夸克网盘",
+    "UC网盘",
+    "阿里云盘",
+    "百度网盘",
+    "迅雷云盘",
+    "光鸭云盘",
+    "天翼云盘",
+    "123云盘"
   ],
   "ads": [
     "mozai.4gtv.tv",
