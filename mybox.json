@@ -4186,6 +4186,13 @@
       "ext": ""
     },
     {
+      "key": "py_huangguo2",
+      "name": "黄果剧场[py]",
+      "type": 3,
+      "api": "./js/ss/黄果剧场.py",
+      "ext": ""
+    },
+    {
       "key": "py_huangdou",
       "name": "黄豆短剧[py]",
       "type": 3,
