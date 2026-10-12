@@ -56,10 +56,10 @@
       "filterable": 1
     },
     {
-      "key": "maoyan",
-      "name": "猫眼资源",
+      "key": "yutu",
+      "name": "鱼兔资源",
       "type": 1,
-      "api": "https://api.maoyanapi.top/api.php/provide/vod",
+      "api": "https://apiyutu.com/api.php/provide/vod",
       "playUrl": "",
       "ext": "",
       "searchable": 1,

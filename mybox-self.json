@@ -1,5 +1,5 @@
 {
-  "spider": "https://gh-proxy.com/https://raw.githubusercontent.com/xiaohuya520/tvbox-dc/main/jar/sun_spider.jar;md5;b350cc5bd03110fdfe6d5d4e5c99fbcd",
+  "spider": "https://gh-proxy.com/https://raw.githubusercontent.com/xiaohuya520/tvbox-dc/main/jar/sun_spider.jar;md5;2f92b21b869e0722eec445ed3cc71aa6",
   "sites": [
     {
       "key": "csp_Douban",
@@ -95,10 +95,10 @@
       "filterable": 1
     },
     {
-      "key": "maoyan",
-      "name": "猫眼资源",
+      "key": "yutu",
+      "name": "鱼兔资源",
       "type": 1,
-      "api": "https://api.maoyanapi.top/api.php/provide/vod",
+      "api": "https://apiyutu.com/api.php/provide/vod",
       "playUrl": "",
       "ext": "",
       "searchable": 1,
@@ -441,19 +441,6 @@
         "dataIv": "oW5UxZ5kWVr1DI69",
         "init": "initV122",
         "ua": "okhttp/3.10.0"
-      }
-    },
-    {
-      "key": "世界",
-      "name": "世界 • APP",
-      "type": 3,
-      "api": "csp_AppGet",
-      "searchable": 1,
-      "changeable": 1,
-      "ext": {
-        "url": "https://appcms.4ksj.app",
-        "dataKey": "O3K6rYx75Q4xtiIE",
-        "dataIv": "O3K6rYx75Q4xtiIE"
       }
     },
     {
