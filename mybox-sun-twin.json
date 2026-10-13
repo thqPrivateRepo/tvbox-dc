@@ -1,5 +1,5 @@
 {
-  "spider": "https://img.51shazhu.com/autoupload/g1b6f/20261012/opNK/0X0/10121058.png;md5;2f92b21b869e0722eec445ed3cc71aa6",
+  "spider": "https://img.51shazhu.com/autoupload/g1b6f/20261013/I1ue/0X0/10131228.png;md5;7d204aeb2bc2d6c89aaa18460492b67d",
   "sites": [
     {
       "key": "csp_Douban",
@@ -88,6 +88,17 @@
       "name": "光速资源",
       "type": 1,
       "api": "http://api.guangsuapi.com/api.php/provide/vod",
+      "playUrl": "",
+      "ext": "",
+      "searchable": 1,
+      "quickSearch": 1,
+      "filterable": 1
+    },
+    {
+      "key": "maoyan",
+      "name": "猫眼资源",
+      "type": 1,
+      "api": "https://api.maoyanapi.top/api.php/provide/vod",
       "playUrl": "",
       "ext": "",
       "searchable": 1,
