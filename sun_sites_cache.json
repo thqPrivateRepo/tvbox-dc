@@ -1,7 +1,7 @@
 {
-  "updated": "2026-10-13T21:22:16.920Z",
-  "count": 106,
-  "spider": "https://img.51shazhu.com/autoupload/g1b6f/20261013/I1ue/0X0/10131228.png;md5;7d204aeb2bc2d6c89aaa18460492b67d",
+  "updated": "2026-10-14T20:15:50.261Z",
+  "count": 107,
+  "spider": "https://img.51shazhu.com/autoupload/g1b6f/20261014/s7Ov/0X0/10141243.png;md5;7d204aeb2bc2d6c89aaa18460492b67d",
   "extra": {
     "wallpaper": "http://127.0.0.1:9978/proxy?do=wallpaper",
     "logo": "https://pic7.fukit.cn/autoupload/gE6Y0Af2tjXBCNig6CtNDI12_FRYNb81z6UPhMWD8iI/20251224/dJkT/1080X1080/logo.jpg/webp",
@@ -1326,6 +1326,18 @@
       "type": 3,
       "api": "csp_QingtingFM",
       "searchable": 0,
+      "quickSearch": 0,
+      "changeable": 0,
+      "style": {
+        "type": "list"
+      }
+    },
+    {
+      "key": "听友听书",
+      "name": "听友 • 听书",
+      "type": 3,
+      "api": "csp_TingTingyou",
+      "searchable": 1,
       "quickSearch": 0,
       "changeable": 0,
       "style": {
