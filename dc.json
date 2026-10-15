@@ -57,12 +57,12 @@
       "url": "http://xhztv.top/4k.json"
     },
     {
-      "name": "牛二",
-      "url": "https://9280.kstore.space/newwex.json"
-    },
-    {
       "name": "宝盒VIP",
       "url": "https://raw.githubusercontent.com/guot55/YGBH/main/vip2.json"
+    },
+    {
+      "name": "config",
+      "url": "https://raw.githubusercontent.com/FongMi/CatVodSpider/main/json/config.json"
     }
   ],
   "urls": [
@@ -123,12 +123,12 @@
       "name": "小盒子4K"
     },
     {
-      "url": "https://9280.kstore.space/newwex.json",
-      "name": "牛二"
-    },
-    {
       "url": "https://raw.githubusercontent.com/guot55/YGBH/main/vip2.json",
       "name": "宝盒VIP"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/FongMi/CatVodSpider/main/json/config.json",
+      "name": "config"
     }
   ]
 }
