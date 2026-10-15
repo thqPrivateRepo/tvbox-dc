@@ -1,5 +1,5 @@
 {
-  "spider": "https://gh-proxy.com/https://raw.githubusercontent.com/xiaohuya520/tvbox-dc/main/jar/sun_spider.jar;md5;bf32cf121ae92e49326a9fed7a82b76b",
+  "spider": "https://gh-proxy.com/https://raw.githubusercontent.com/xiaohuya520/tvbox-dc/main/jar/sun_spider.jar;md5;bca2498f2d40c694b285471062748cf0",
   "sites": [
     {
       "key": "csp_Douban",
@@ -16,7 +16,7 @@
       "name": "配置·中心",
       "type": 3,
       "api": "csp_PanConfigGuard",
-      "jar": "http://oss4liview.moji.com/thd_file/2026/10/15/c1421099af98b803800006ea71c9be4e.jpg;md5;13d2d035c60a8760700ae82673bb7c0d",
+      "jar": "http://oss4liview.moji.com/thd_file/2026/09/24/06cf2230c30d9c26fa46ea79147b330d.jpg;md5;fc8f993c9297d38139363cd0e3db9853",
       "searchable": 0,
       "quickSearch": 0,
       "changeable": 0,
@@ -30,7 +30,7 @@
       "name": "我的·网盘",
       "type": 3,
       "api": "csp_MyPanGuard",
-      "jar": "http://oss4liview.moji.com/thd_file/2026/10/15/c1421099af98b803800006ea71c9be4e.jpg;md5;13d2d035c60a8760700ae82673bb7c0d",
+      "jar": "http://oss4liview.moji.com/thd_file/2026/09/24/06cf2230c30d9c26fa46ea79147b330d.jpg;md5;fc8f993c9297d38139363cd0e3db9853",
       "searchable": 0,
       "quickSearch": 0,
       "changeable": 0,
@@ -243,6 +243,15 @@
       "name": "一起 • APP",
       "type": 3,
       "api": "csp_AppYQK",
+      "searchable": 1,
+      "quickSearch": 1,
+      "filterable": 0
+    },
+    {
+      "key": "番茄影视",
+      "name": "番茄 • APP",
+      "type": 3,
+      "api": "csp_AppFQ",
       "searchable": 1,
       "quickSearch": 1,
       "filterable": 0
