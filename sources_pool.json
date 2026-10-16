@@ -1933,5 +1933,35 @@
     "name": "https://www.ymaoo.cn/3148.html",
     "url": "https://www.ymaoo.cn/3148.html",
     "src": "external"
+  },
+  "https://raw.githubusercontent.com/Lightconer/tvbox-ysc-config/main/output/laoliubei.json": {
+    "name": "laoliubei",
+    "url": "https://raw.githubusercontent.com/Lightconer/tvbox-ysc-config/main/output/laoliubei.json",
+    "src": "ghagg"
+  },
+  "https://raw.githubusercontent.com/Lightconer/tvbox-ysc-config/main/output/shiguang.json": {
+    "name": "shiguang",
+    "url": "https://raw.githubusercontent.com/Lightconer/tvbox-ysc-config/main/output/shiguang.json",
+    "src": "ghagg"
+  },
+  "https://raw.githubusercontent.com/Lightconer/tvbox-ysc-config/main/output/tinghao.json": {
+    "name": "tinghao",
+    "url": "https://raw.githubusercontent.com/Lightconer/tvbox-ysc-config/main/output/tinghao.json",
+    "src": "ghagg"
+  },
+  "https://raw.githubusercontent.com/Lightconer/tvbox-ysc-config/main/output/xiaohezi.json": {
+    "name": "xiaohezi",
+    "url": "https://raw.githubusercontent.com/Lightconer/tvbox-ysc-config/main/output/xiaohezi.json",
+    "src": "ghagg"
+  },
+  "https://raw.githubusercontent.com/Lightconer/tvbox-ysc-config/main/output/xiaoma.json": {
+    "name": "xiaoma",
+    "url": "https://raw.githubusercontent.com/Lightconer/tvbox-ysc-config/main/output/xiaoma.json",
+    "src": "ghagg"
+  },
+  "https://www.ymaoo.cn/1920.html": {
+    "name": "https://www.ymaoo.cn/1920.html",
+    "url": "https://www.ymaoo.cn/1920.html",
+    "src": "external"
   }
 }
