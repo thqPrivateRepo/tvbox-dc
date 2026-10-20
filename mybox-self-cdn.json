@@ -1,5 +1,5 @@
 {
-  "spider": "https://cdn.jsdelivr.net/gh/xiaohuya520/tvbox-dc@main/jar/sun_spider.png;md5;bbb5214a2ba3724821c5f8d2db5071dc",
+  "spider": "https://cdn.jsdelivr.net/gh/xiaohuya520/tvbox-dc@main/jar/sun_spider.png;md5;4a35e9a49f5872ea0a4358e5424e657a",
   "sites": [
     {
       "key": "csp_Douban",
@@ -753,16 +753,6 @@
       "timeout": 60
     },
     {
-      "key": "人人",
-      "name": "人人 • 4K",
-      "type": 3,
-      "api": "csp_RenRen",
-      "searchable": 1,
-      "quickSearch": 1,
-      "filterable": 1,
-      "timeout": 60
-    },
-    {
       "key": "即刻",
       "name": "即刻 • 4K",
       "type": 3,
@@ -800,6 +790,13 @@
         "type": "list"
       },
       "timeout": 60
+    },
+    {
+      "key": "红果短剧",
+      "name": "红果 • 短剧",
+      "type": 3,
+      "api": "https://oss-v1.wangmeipo.cn/236/红果短剧.py",
+      "genre": "shortdrama"
     },
     {
       "key": "七猫短剧",
@@ -1268,10 +1265,7 @@
       "key": "世界听书",
       "name": "世界 • 听书",
       "type": 3,
-      "api": "csp_TingShijie",
-      "searchable": 1,
-      "quickSearch": 0,
-      "changeable": 0,
+      "api": "https://oss-v1.wangmeipo.cn/236/世界听书.py",
       "style": {
         "type": "list"
       }

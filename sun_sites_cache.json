@@ -1,7 +1,7 @@
 {
-  "updated": "2026-10-19T21:10:08.452Z",
+  "updated": "2026-10-20T20:03:07.198Z",
   "count": 106,
-  "spider": "https://img.51shazhu.com/autoupload/g1b6f/20261018/eV6v/0X0/10180056.png;md5;bbb5214a2ba3724821c5f8d2db5071dc",
+  "spider": "https://img.51shazhu.com/autoupload/g1b6f/20261020/9AtF/0X0/10201939.png;md5;4a35e9a49f5872ea0a4358e5424e657a",
   "extra": {
     "wallpaper": "http://127.0.0.1:9978/proxy?do=wallpaper",
     "logo": "https://pic7.fukit.cn/autoupload/gE6Y0Af2tjXBCNig6CtNDI12_FRYNb81z6UPhMWD8iI/20251224/dJkT/1080X1080/logo.jpg/webp",
@@ -817,16 +817,6 @@
       "timeout": 60
     },
     {
-      "key": "人人",
-      "name": "人人 • 4K",
-      "type": 3,
-      "api": "csp_RenRen",
-      "searchable": 1,
-      "quickSearch": 1,
-      "filterable": 1,
-      "timeout": 60
-    },
-    {
       "key": "即刻",
       "name": "即刻 • 4K",
       "type": 3,
@@ -864,6 +854,13 @@
         "type": "list"
       },
       "timeout": 60
+    },
+    {
+      "key": "红果短剧",
+      "name": "红果 • 短剧",
+      "type": 3,
+      "api": "https://oss-v1.wangmeipo.cn/236/红果短剧.py",
+      "genre": "shortdrama"
     },
     {
       "key": "七猫短剧",
@@ -1332,10 +1329,7 @@
       "key": "世界听书",
       "name": "世界 • 听书",
       "type": 3,
-      "api": "csp_TingShijie",
-      "searchable": 1,
-      "quickSearch": 0,
-      "changeable": 0,
+      "api": "https://oss-v1.wangmeipo.cn/236/世界听书.py",
       "style": {
         "type": "list"
       }
