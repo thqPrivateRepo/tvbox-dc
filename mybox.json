@@ -1977,7 +1977,7 @@
     },
     {
       "key": "点我切源",
-      "name": "豆豆┃片单 <修复漫剧、海绵>",
+      "name": "豆豆┃片单",
       "type": 3,
       "api": "csp_DouDouGuard",
       "indexs": 1,
@@ -2043,17 +2043,6 @@
       "quickSearch": 1,
       "changeable": 0,
       "ext": "rfOIzPkSUkANv6AT2prC8en3+Trbx4j10CIoZMv3Ag4bdEYQqTMqu/Z3YPtC2NJv6n6YeZdgyWlo4WJjBL5gUt6B7LvCEDT4CLrWka31GRq7jwVkfQRB/Jy9HkG7E8xUBIJi5DdVFk3qAuGnwUWqQNRblRxzHW+tdSm6zoFcG/QkZ97bzWOXn0fzbgwjBDkBHgcPIYjlULlctCNKgJ9DzGNSl+zMZDZgmxczsZeeahRS38Cst3qvaHn1T2lmLBGVGXPaRovi77LPRRDOJSNRrdpvCHdRikYwgar0MU56hXMGeGBiKp/OmGTIYR8dFRGvZ/m8xGOqs8U13h6wvADOGlYoP9VaQBqTcDnz9Q0Urhw3oFXWyvIlUrDhX9la5L2NYzagbyk3afqhxeSXXp07nAFsNy2CojHRTbmz4eohLoIJTSi2DzPpheVx1DAapfgRdTc7Ax5ddYpN338GiDAa0GnEgLe04a1pZ5jF+/Q7HJswqlSO+DXCQ3FjRbb/ZPQcozcCWwzhUHE1QUAt799V9DPMuiHGyudIcZarGQmezB+Lb45RdHIRy0PXD+NRVPJlfDFD5FMGSqsiVklibvuwlVHT8J5vHgh/1nEZoI1RlYYLrkjTts2EeQmrpB/sgLyo1vnjFw=="
-    },
-    {
-      "key": "原创",
-      "name": "👒原创┃不卡",
-      "type": 3,
-      "api": "csp_YCyzGuard",
-      "timeout": 15,
-      "playerType": 2,
-      "searchable": 1,
-      "quickSearch": 1,
-      "changeable": 1
     },
     {
       "key": "厂长",
@@ -2154,6 +2143,19 @@
       "quickSearch": 1,
       "changeable": 1,
       "ext": "uqGL1bNENExT7/hGxpSE5qU="
+    },
+    {
+      "key": "风云",
+      "name": "☁️风云┃多线",
+      "type": 3,
+      "api": "csp_FyGuard",
+      "ext": {
+        "type": "video",
+        "name": "Fy"
+      },
+      "quickSearch": 1,
+      "searchable": 1,
+      "changeable": 1
     },
     {
       "key": "视界",
@@ -3455,10 +3457,7 @@
       "key": "世界听书",
       "name": "世界 • 听书",
       "type": 3,
-      "api": "csp_TingShijie",
-      "searchable": 1,
-      "quickSearch": 0,
-      "changeable": 0,
+      "api": "./py/世界听书.py",
       "style": {
         "type": "list"
       }
@@ -5599,6 +5598,7 @@
       "searchable": 0,
       "quickSearch": 0,
       "changeable": 0,
+      "ext": "DjHggg",
       "genre": "shortdrama"
     },
     {
@@ -6071,10 +6071,9 @@
       "logo": "https://epg.112114.xyz/logo/{name}.png"
     },
     {
-      "name": "范明明（需开启V6网络）",
-      "type": 0,
-      "url": "https://nos.netease.com/ysf/3d75a78a0fc7ede372c03598d6d10367.m3u",
-      "playerType": 2
+      "name": "牛播一",
+      "url": "http://127.0.0.1:9978/proxy?do=cctva",
+      "timeZone": "Asia/Shanghai"
     },
     {
       "name": "虎牙一起看",
