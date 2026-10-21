@@ -1,7 +1,7 @@
 {
-  "updated": "2026-10-20T20:03:07.198Z",
-  "count": 106,
-  "spider": "https://img.51shazhu.com/autoupload/g1b6f/20261020/9AtF/0X0/10201939.png;md5;4a35e9a49f5872ea0a4358e5424e657a",
+  "updated": "2026-10-21T20:15:23.029Z",
+  "count": 107,
+  "spider": "https://img.51shazhu.com/autoupload/g1b6f/20261021/WWtq/0X0/10211228.png;md5;ea98a70ee6967e433c24e4941ede7fd8",
   "extra": {
     "wallpaper": "http://127.0.0.1:9978/proxy?do=wallpaper",
     "logo": "https://pic7.fukit.cn/autoupload/gE6Y0Af2tjXBCNig6CtNDI12_FRYNb81z6UPhMWD8iI/20251224/dJkT/1080X1080/logo.jpg/webp",
@@ -1282,6 +1282,18 @@
       "name": "咖啡 • 体育",
       "type": 3,
       "api": "csp_SportsKafei",
+      "searchable": 0,
+      "quickSearch": 0,
+      "changeable": 0,
+      "style": {
+        "type": "list"
+      }
+    },
+    {
+      "key": "球通体育",
+      "name": "球通 • 体育",
+      "type": 3,
+      "api": "csp_SportQiutong",
       "searchable": 0,
       "quickSearch": 0,
       "changeable": 0,

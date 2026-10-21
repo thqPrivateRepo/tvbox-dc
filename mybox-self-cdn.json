@@ -1,5 +1,5 @@
 {
-  "spider": "https://cdn.jsdelivr.net/gh/xiaohuya520/tvbox-dc@main/jar/sun_spider.png;md5;4a35e9a49f5872ea0a4358e5424e657a",
+  "spider": "https://cdn.jsdelivr.net/gh/xiaohuya520/tvbox-dc@main/jar/sun_spider.png;md5;ea98a70ee6967e433c24e4941ede7fd8",
   "sites": [
     {
       "key": "csp_Douban",
@@ -1218,6 +1218,18 @@
       "name": "咖啡 • 体育",
       "type": 3,
       "api": "csp_SportsKafei",
+      "searchable": 0,
+      "quickSearch": 0,
+      "changeable": 0,
+      "style": {
+        "type": "list"
+      }
+    },
+    {
+      "key": "球通体育",
+      "name": "球通 • 体育",
+      "type": 3,
+      "api": "csp_SportQiutong",
       "searchable": 0,
       "quickSearch": 0,
       "changeable": 0,
