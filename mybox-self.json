@@ -1,5 +1,5 @@
 {
-  "spider": "https://gh-proxy.com/https://raw.githubusercontent.com/xiaohuya520/tvbox-dc/main/jar/sun_spider.jar;md5;82a08de38da73220dcbdc2184dd6521f",
+  "spider": "https://gh-proxy.com/https://raw.githubusercontent.com/xiaohuya520/tvbox-dc/main/jar/sun_spider.jar;md5;f302b3d8b3b84ad823a720966d9a1dfc",
   "sites": [
     {
       "key": "csp_Douban",
@@ -16,7 +16,7 @@
       "name": "配置·中心",
       "type": 3,
       "api": "csp_PanConfigGuard",
-      "jar": "http://oss4liview.moji.com/thd_file/2026/10/20/a665408c7f44fbbd128badb05f545aad.jpg;md5;12e821fd4c608270b019feb736c469dd",
+      "jar": "http://oss4liview.moji.com/thd_file/2026/10/23/b1a69d9c535fd309388e390b0b1e0749.jpg;md5;3c264c629e02273b9ad61e769218c508",
       "searchable": 0,
       "quickSearch": 0,
       "changeable": 0,
@@ -30,7 +30,7 @@
       "name": "我的·网盘",
       "type": 3,
       "api": "csp_MyPanGuard",
-      "jar": "http://oss4liview.moji.com/thd_file/2026/10/20/a665408c7f44fbbd128badb05f545aad.jpg;md5;12e821fd4c608270b019feb736c469dd",
+      "jar": "http://oss4liview.moji.com/thd_file/2026/10/23/b1a69d9c535fd309388e390b0b1e0749.jpg;md5;3c264c629e02273b9ad61e769218c508",
       "searchable": 0,
       "quickSearch": 0,
       "changeable": 0,
