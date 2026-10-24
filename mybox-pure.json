@@ -78,6 +78,17 @@
       "filterable": 1
     },
     {
+      "key": "aosika",
+      "name": "奥斯卡资源",
+      "type": 1,
+      "api": "https://aosikazy.com/api.php/provide/vod",
+      "playUrl": "",
+      "ext": "",
+      "searchable": 1,
+      "quickSearch": 1,
+      "filterable": 1
+    },
+    {
       "key": "shandian",
       "name": "闪电资源",
       "type": 1,
