@@ -1,6 +1,6 @@
 {
-  "updated": "2026-10-24T18:52:10.770Z",
-  "count": 104,
+  "updated": "2026-10-25T19:08:30.282Z",
+  "count": 106,
   "spider": "https://img.51shazhu.com/autoupload/g1b6f/20261024/Fczo/0X0/10241314.png;md5;c1978e5cec469f66f07efd37d39ec26a",
   "extra": {
     "wallpaper": "http://127.0.0.1:9978/proxy?do=wallpaper",
@@ -1197,6 +1197,26 @@
       "name": "盘搜 • 搜索",
       "type": 3,
       "api": "csp_PanSou",
+      "searchable": 1,
+      "quickSearch": 0,
+      "filterable": 0,
+      "timeout": 60
+    },
+    {
+      "key": "酷乐",
+      "name": "酷乐 • 搜索",
+      "type": 3,
+      "api": "csp_KuLe",
+      "searchable": 1,
+      "quickSearch": 0,
+      "filterable": 0,
+      "timeout": 60
+    },
+    {
+      "key": "百酷",
+      "name": "百酷 • 搜索",
+      "type": 3,
+      "api": "csp_Baiku",
       "searchable": 1,
       "quickSearch": 0,
       "filterable": 0,
