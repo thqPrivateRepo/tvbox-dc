@@ -37,10 +37,6 @@
       "url": "https://gitlab.com/noimank/tvbox/-/raw/main/tvbox1.json"
     },
     {
-      "name": "ls660飞猫",
-      "url": "https://www.ls660.com/TV/feimao.json"
-    },
-    {
       "name": "PG",
       "url": "https://www.252035.xyz/p/jsm.json"
     },
@@ -63,6 +59,10 @@
     {
       "name": "config",
       "url": "https://raw.githubusercontent.com/FongMi/CatVodSpider/main/json/config.json"
+    },
+    {
+      "name": "牛二",
+      "url": "https://9280.kstore.space/newwex.json"
     }
   ],
   "urls": [
@@ -103,10 +103,6 @@
       "name": "noimank"
     },
     {
-      "url": "https://www.ls660.com/TV/feimao.json",
-      "name": "ls660飞猫"
-    },
-    {
       "url": "https://www.252035.xyz/p/jsm.json",
       "name": "PG"
     },
@@ -129,6 +125,10 @@
     {
       "url": "https://raw.githubusercontent.com/FongMi/CatVodSpider/main/json/config.json",
       "name": "config"
+    },
+    {
+      "url": "https://9280.kstore.space/newwex.json",
+      "name": "牛二"
     }
   ]
 }
