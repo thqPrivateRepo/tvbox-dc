@@ -1,5 +1,5 @@
 {
-  "spider": "http://oss4liview.moji.com/thd_file/2026/10/23/b1a69d9c535fd309388e390b0b1e0749.jpg;md5;3c264c629e02273b9ad61e769218c508",
+  "spider": "http://oss4liview.moji.com/thd_file/2026/10/26/837a77b77fc98aba6b97856944e94d7c.jpg;md5;722d5c1bdcb1b38fc62874941e060d6b",
   "sites": [
     {
       "key": "Douban",
@@ -14,7 +14,7 @@
     },
     {
       "key": "Doubanaaaa",
-      "name": "🐮【更新日期:20261023】🐮",
+      "name": "🐮【更新日期:20261026】🐮",
       "type": 3,
       "api": "csp_NewDouBanGuard",
       "indexs": 1,
@@ -4244,11 +4244,13 @@
       "ext": ""
     },
     {
-      "key": "py_51吃瓜",
+      "key": "py_xigua",
       "name": "51吃瓜[py]",
       "type": 3,
       "api": "./js/ss/xigua51.py",
-      "ext": ""
+      "ext": {
+        "h265": true
+      }
     },
     {
       "key": "py_51短剧",
