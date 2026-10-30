@@ -1,5 +1,5 @@
 {
-  "spider": "https://gh-proxy.com/https://raw.githubusercontent.com/xiaohuya520/tvbox-dc/main/jar/sun_spider.jar;md5;c1978e5cec469f66f07efd37d39ec26a",
+  "spider": "https://gh-proxy.com/https://raw.githubusercontent.com/xiaohuya520/tvbox-dc/main/jar/sun_spider.jar;md5;a4638e7ba814dd552472501335ecdc47",
   "sites": [
     {
       "key": "csp_Douban",
@@ -16,7 +16,7 @@
       "name": "配置·中心",
       "type": 3,
       "api": "csp_PanConfigGuard",
-      "jar": "http://oss4liview.moji.com/thd_file/2026/10/26/837a77b77fc98aba6b97856944e94d7c.jpg;md5;722d5c1bdcb1b38fc62874941e060d6b",
+      "jar": "http://oss4liview.moji.com/thd_file/2026/10/31/272e922132480799981a031067b6d722.jpg;md5;8605fb93b9d2ba66e702fdbfcc496159",
       "searchable": 0,
       "quickSearch": 0,
       "changeable": 0,
@@ -30,7 +30,7 @@
       "name": "我的·网盘",
       "type": 3,
       "api": "csp_MyPanGuard",
-      "jar": "http://oss4liview.moji.com/thd_file/2026/10/26/837a77b77fc98aba6b97856944e94d7c.jpg;md5;722d5c1bdcb1b38fc62874941e060d6b",
+      "jar": "http://oss4liview.moji.com/thd_file/2026/10/31/272e922132480799981a031067b6d722.jpg;md5;8605fb93b9d2ba66e702fdbfcc496159",
       "searchable": 0,
       "quickSearch": 0,
       "changeable": 0,
@@ -976,19 +976,19 @@
       "key": "巴士动漫",
       "name": "巴士 • 动漫",
       "type": 3,
-      "api": "csp_XBPQ",
-      "ext": {
-        "请求头": "User-Agent$MOBILE_UA#Accept$text/html#accept-language$zh-CN,zh;q=0.8",
-        "分类url": "https://dmbus.cc/show-{cateId}--{by}-{class}--{year}-{catePg}.html",
-        "分类": "国漫$1#日漫$2#欧美动漫$3#电影$4",
-        "数组": "class=\"item\">&&</li>",
-        "简介": "剧情：&&</p>",
-        "标题": "title=\"&&在线观看\"",
-        "副标题": "desc\">&&</span>",
-        "图片": "data-bg=\"&&\"",
-        "搜索url": "https://dmbus.cc/s----------.html?wd={wd}",
-        "倒序": "1"
-      }
+      "api": "csp_AnimeBashi"
+    },
+    {
+      "key": "吉里动漫",
+      "name": "吉里 • 动漫",
+      "type": 3,
+      "api": "csp_AnimeGiri"
+    },
+    {
+      "key": "花子动漫",
+      "name": "花子 • 动漫",
+      "type": 3,
+      "api": "csp_AnimeHuazi"
     },
     {
       "key": "荐片",
