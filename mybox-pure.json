@@ -164,6 +164,12 @@
       "searchable": 1,
       "quickSearch": 1,
       "filterable": 1
+    },
+    {
+      "key": "巨量",
+      "name": "巨量 • 影视",
+      "type": 1,
+      "api": "https://api.juliang.live/api/provide/vod"
     }
   ],
   "lives": [],

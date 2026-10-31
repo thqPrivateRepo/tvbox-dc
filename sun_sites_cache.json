@@ -1,6 +1,6 @@
 {
-  "updated": "2026-10-30T20:54:44.714Z",
-  "count": 108,
+  "updated": "2026-10-31T20:07:12.733Z",
+  "count": 109,
   "spider": "https://aly2.tuchuangyun.top/autoupload/g1b6f/20261030/K1fE/0X0/10301014.png;md5;a4638e7ba814dd552472501335ecdc47",
   "extra": {
     "wallpaper": "http://127.0.0.1:9978/proxy?do=wallpaper",
@@ -910,6 +910,12 @@
         "分类url": "https://www.mochadj.com/i/{cateId}-{catePg}.html"
       },
       "genre": "shortdrama"
+    },
+    {
+      "key": "巨量",
+      "name": "巨量 • 影视",
+      "type": 1,
+      "api": "https://api.juliang.live/api/provide/vod"
     },
     {
       "key": "飞娱影视",
