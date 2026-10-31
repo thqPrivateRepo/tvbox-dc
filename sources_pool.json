@@ -2138,5 +2138,10 @@
     "name": "https://designshidai.com/29704.html",
     "url": "https://designshidai.com/29704.html",
     "src": "external"
+  },
+  "https://www.seaskytv.com": {
+    "name": "https://www.seaskytv.com",
+    "url": "https://www.seaskytv.com",
+    "src": "external"
   }
 }
