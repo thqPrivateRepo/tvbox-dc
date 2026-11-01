@@ -1,5 +1,5 @@
 {
-  "spider": "http://oss4liview.moji.com/thd_file/2026/10/31/272e922132480799981a031067b6d722.jpg;md5;8605fb93b9d2ba66e702fdbfcc496159",
+  "spider": "http://oss4liview.moji.com/thd_file/2026/11/02/c9050ddf2e4eb65bc925f27924695099.jpg;md5;a5006e8f9c77331a30309c0e5f138481",
   "sites": [
     {
       "key": "Douban",
@@ -14,7 +14,7 @@
     },
     {
       "key": "Doubanaaaa",
-      "name": "🐮【更新日期:20261031】🐮",
+      "name": "🐮【更新日期:20261102】🐮",
       "type": 3,
       "api": "csp_NewDouBanGuard",
       "indexs": 1,
@@ -3113,6 +3113,15 @@
       "quickSearch": 1,
       "filterable": 1,
       "ext": "https://xunlei8.me"
+    },
+    {
+      "key": "电影港",
+      "name": "电影港 • 磁力",
+      "type": 3,
+      "api": "csp_DianYingG",
+      "searchable": 1,
+      "quickSearch": 1,
+      "filterable": 1
     },
     {
       "key": "阿里云盘",
