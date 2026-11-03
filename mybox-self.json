@@ -1,5 +1,5 @@
 {
-  "spider": "https://gh-proxy.com/https://raw.githubusercontent.com/xiaohuya520/tvbox-dc/main/jar/sun_spider.jar;md5;9265a1d14d8135dc4f1dca0a8b30a130",
+  "spider": "https://gh-proxy.com/https://raw.githubusercontent.com/xiaohuya520/tvbox-dc/main/jar/sun_spider.jar;md5;c6c7cbd14359dee31a97abb7ec27df19",
   "sites": [
     {
       "key": "csp_Douban",
@@ -16,7 +16,7 @@
       "name": "配置·中心",
       "type": 3,
       "api": "csp_PanConfigGuard",
-      "jar": "http://oss4liview.moji.com/thd_file/2026/11/02/c9050ddf2e4eb65bc925f27924695099.jpg;md5;a5006e8f9c77331a30309c0e5f138481",
+      "jar": "http://oss4liview.moji.com/thd_file/2026/11/04/690e7f13e63718e6ea88add0c59d4289.jpg;md5;86cb2cdcd99e29334004b80e48007e9a",
       "searchable": 0,
       "quickSearch": 0,
       "changeable": 0,
@@ -30,7 +30,7 @@
       "name": "我的·网盘",
       "type": 3,
       "api": "csp_MyPanGuard",
-      "jar": "http://oss4liview.moji.com/thd_file/2026/11/02/c9050ddf2e4eb65bc925f27924695099.jpg;md5;a5006e8f9c77331a30309c0e5f138481",
+      "jar": "http://oss4liview.moji.com/thd_file/2026/11/04/690e7f13e63718e6ea88add0c59d4289.jpg;md5;86cb2cdcd99e29334004b80e48007e9a",
       "searchable": 0,
       "quickSearch": 0,
       "changeable": 0,
@@ -248,6 +248,16 @@
       "ext": {
         "url": "http://v.rbotv.cn"
       }
+    },
+    {
+      "key": "快映fox",
+      "name": "快映 • APP",
+      "type": 3,
+      "api": "csp_AppFox",
+      "searchable": 1,
+      "quickSearch": 1,
+      "filterable": 0,
+      "ext": "https://www.pjb777.top/ky4kbgq7b273.json"
     },
     {
       "key": "一起影视",
@@ -859,12 +869,6 @@
       "genre": "shortdrama"
     },
     {
-      "key": "巨量",
-      "name": "巨量 • 影视",
-      "type": 1,
-      "api": "https://api.juliang.live/api/provide/vod"
-    },
-    {
       "key": "飞娱影视",
       "name": "飞娱 • 影视",
       "type": 3,
@@ -977,6 +981,12 @@
       "style": {
         "type": "list"
       }
+    },
+    {
+      "key": "稀饭",
+      "name": "稀饭 • 动漫",
+      "type": 3,
+      "api": "csp_AnimeXifan"
     },
     {
       "key": "巴士动漫",
