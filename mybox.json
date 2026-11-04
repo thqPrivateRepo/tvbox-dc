@@ -1979,7 +1979,7 @@
     },
     {
       "key": "点我切源",
-      "name": "豆豆┃片单<修复所有>",
+      "name": "豆豆┃片单",
       "type": 3,
       "api": "csp_DouDouGuard",
       "indexs": 1,
