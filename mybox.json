@@ -5243,10 +5243,10 @@
       "changeable": 1
     },
     {
-      "name": "🐱青云┃动漫",
-      "key": "DMqingk",
+      "name": "🐱快快┃动漫",
+      "key": "DMlmm",
       "type": 3,
-      "api": "csp_DMqingkAmns",
+      "api": "csp_DMlmmAmns",
       "searchable": 1,
       "quickSearch": 1,
       "changeable": 1
@@ -5258,8 +5258,7 @@
       "api": "csp_DMxiguaAmns",
       "searchable": 1,
       "quickSearch": 1,
-      "changeable": 1,
-      "ext": "DMxigua"
+      "changeable": 1
     },
     {
       "name": "🐱魔都┃动漫",
