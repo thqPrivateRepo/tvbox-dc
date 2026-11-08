@@ -1,7 +1,7 @@
 {
-  "updated": "2026-11-06T21:39:29.568Z",
+  "updated": "2026-11-08T20:38:43.034Z",
   "count": 111,
-  "spider": "https://aly2.tuchuangyun.top/autoupload/g1b6f/20261106/bPdt/0X0/11061203.png;md5;96ae86a8139a92009c4d83d1c6d7fac1",
+  "spider": "https://aly2.tuchuangyun.top/autoupload/g1b6f/20261108/96nO/0X0/11082316.png;md5;3d774aee7f24ee10afe42bb8562a119e",
   "extra": {
     "wallpaper": "http://127.0.0.1:9978/proxy?do=wallpaper",
     "logo": "https://pic7.fukit.cn/autoupload/gE6Y0Af2tjXBCNig6CtNDI12_FRYNb81z6UPhMWD8iI/20251224/dJkT/1080X1080/logo.jpg/webp",
@@ -922,6 +922,12 @@
       "genre": "shortdrama"
     },
     {
+      "key": "星辰影视",
+      "name": "星辰 • 影视",
+      "type": 3,
+      "api": "csp_XingChen"
+    },
+    {
       "key": "飞娱影视",
       "name": "飞娱 • 影视",
       "type": 3,
@@ -985,19 +991,6 @@
       "searchable": 1,
       "quickSearch": 1,
       "filterable": 1
-    },
-    {
-      "key": "面包影视",
-      "name": "面包 • 影视",
-      "type": 3,
-      "api": "csp_XBPQ",
-      "ext": {
-        "请求头": "User-Agent$MOBILE_UA",
-        "编码": "UTF-8",
-        "分类url": "https://v.aiwule.com/vodshow/{cateId}-{area}-{by}-{class}-{lang}-{letter}---{catePg}---{year}.html",
-        "分类": "电影$20#电视剧$21#动漫$23#综艺$22#短剧$47",
-        "简介": "简介：&&"
-      }
     },
     {
       "key": "1905",

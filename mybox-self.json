@@ -1,5 +1,5 @@
 {
-  "spider": "https://gh-proxy.com/https://raw.githubusercontent.com/xiaohuya520/tvbox-dc/main/jar/sun_spider.jar;md5;96ae86a8139a92009c4d83d1c6d7fac1",
+  "spider": "https://gh-proxy.com/https://raw.githubusercontent.com/xiaohuya520/tvbox-dc/main/jar/sun_spider.jar;md5;3d774aee7f24ee10afe42bb8562a119e",
   "sites": [
     {
       "key": "csp_Douban",
@@ -858,6 +858,12 @@
       "genre": "shortdrama"
     },
     {
+      "key": "星辰影视",
+      "name": "星辰 • 影视",
+      "type": 3,
+      "api": "csp_XingChen"
+    },
+    {
       "key": "飞娱影视",
       "name": "飞娱 • 影视",
       "type": 3,
@@ -921,19 +927,6 @@
       "searchable": 1,
       "quickSearch": 1,
       "filterable": 1
-    },
-    {
-      "key": "面包影视",
-      "name": "面包 • 影视",
-      "type": 3,
-      "api": "csp_XBPQ",
-      "ext": {
-        "请求头": "User-Agent$MOBILE_UA",
-        "编码": "UTF-8",
-        "分类url": "https://v.aiwule.com/vodshow/{cateId}-{area}-{by}-{class}-{lang}-{letter}---{catePg}---{year}.html",
-        "分类": "电影$20#电视剧$21#动漫$23#综艺$22#短剧$47",
-        "简介": "简介：&&"
-      }
     },
     {
       "key": "1905",
