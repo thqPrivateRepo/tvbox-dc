@@ -1996,7 +1996,7 @@
     },
     {
       "key": "点我切源",
-      "name": "豆豆┃片单",
+      "name": "豆豆┃片单 <兼容安卓4>",
       "type": 3,
       "api": "csp_DouDouGuard",
       "indexs": 1,
@@ -2072,11 +2072,7 @@
       "playerType": "2",
       "searchable": 1,
       "quickSearch": 1,
-      "changeable": 1,
-      "ext": {
-        "v2": "1",
-        "deviceId": "6dc66339e1314f88"
-      }
+      "changeable": 1
     },
     {
       "key": "立播",
@@ -2139,7 +2135,6 @@
       "type": 3,
       "api": "csp_AppTTGuard",
       "timeout": 10,
-      "playerType": 2,
       "searchable": 1,
       "quickSearch": 1,
       "changeable": 1,
@@ -2203,7 +2198,7 @@
     },
     {
       "key": "AiDj",
-      "name": "❤️AI┃短漫剧",
+      "name": "❤️AI剧┃弹幕",
       "type": 3,
       "api": "csp_AiDjGuard",
       "ext": {
@@ -3003,6 +2998,12 @@
       "genre": "shortdrama"
     },
     {
+      "key": "星辰影视",
+      "name": "星辰 • 影视",
+      "type": 3,
+      "api": "csp_XingChen"
+    },
+    {
       "key": "飞娱影视",
       "name": "飞娱 • 影视",
       "type": 3,
@@ -3066,19 +3067,6 @@
       "searchable": 1,
       "quickSearch": 1,
       "filterable": 1
-    },
-    {
-      "key": "面包影视",
-      "name": "面包 • 影视",
-      "type": 3,
-      "api": "csp_XBPQ",
-      "ext": {
-        "请求头": "User-Agent$MOBILE_UA",
-        "编码": "UTF-8",
-        "分类url": "https://v.aiwule.com/vodshow/{cateId}-{area}-{by}-{class}-{lang}-{letter}---{catePg}---{year}.html",
-        "分类": "电影$20#电视剧$21#动漫$23#综艺$22#短剧$47",
-        "简介": "简介：&&"
-      }
     },
     {
       "key": "1905",
@@ -5009,7 +4997,17 @@
       "ext": "NewGrV2"
     },
     {
-      "name": "📦①线┃秒播",
+      "name": "📦师兄┃APP",
+      "key": "AppV7Dsx",
+      "type": 3,
+      "api": "csp_AppV7Amns",
+      "searchable": 1,
+      "quickSearch": 1,
+      "changeable": 1,
+      "ext": "AppV7Dsx"
+    },
+    {
+      "name": "📦浮舟┃APP",
       "key": "AppV7Fz",
       "type": 3,
       "api": "csp_AppV7Amns",
@@ -5019,7 +5017,7 @@
       "ext": "AppV7Fz"
     },
     {
-      "name": "📦②线┃秒播",
+      "name": "📦星野┃APP",
       "key": "AppV7Xy",
       "type": 3,
       "api": "csp_AppV7Amns",
@@ -5029,7 +5027,7 @@
       "ext": "AppV7Xy"
     },
     {
-      "name": "📦③线┃秒播",
+      "name": "📦织锦┃APP",
       "key": "AppV7Zjdr",
       "type": 3,
       "api": "csp_AppV7Amns",
@@ -5039,7 +5037,7 @@
       "ext": "AppV7Zjdr"
     },
     {
-      "name": "📦④线┃秒播",
+      "name": "📦玄珠┃APP",
       "key": "AppV7Xyz",
       "type": 3,
       "api": "csp_AppV7Amns",
@@ -5049,7 +5047,7 @@
       "ext": "AppV7Xyz"
     },
     {
-      "name": "📦⑤线┃秒播",
+      "name": "📦衔梦┃APP",
       "key": "AppV7Xnm",
       "type": 3,
       "api": "csp_AppV7Amns",
@@ -5059,7 +5057,7 @@
       "ext": "AppV7Xnm"
     },
     {
-      "name": "📦⑥线┃秒播",
+      "name": "📦鸣泉┃APP",
       "key": "AppV7Mtq",
       "type": 3,
       "api": "csp_AppV7Amns",
@@ -5069,7 +5067,7 @@
       "ext": "AppV7Mtq"
     },
     {
-      "name": "📦⑦线┃秒播",
+      "name": "📦琳琅┃APP",
       "key": "AppV7Llq",
       "type": 3,
       "api": "csp_AppV7Amns",
@@ -5079,7 +5077,7 @@
       "ext": "AppV7Llq"
     },
     {
-      "name": "📦⑧线┃秒播",
+      "name": "📦衔石┃APP",
       "key": "AppV7Xsz",
       "type": 3,
       "api": "csp_AppV7Amns",
@@ -5089,7 +5087,7 @@
       "ext": "AppV7Xsz"
     },
     {
-      "name": "📦⑨线┃秒播",
+      "name": "📦星海┃APP",
       "key": "AppV7Xhr",
       "type": 3,
       "api": "csp_AppV7Amns",
@@ -5097,16 +5095,6 @@
       "quickSearch": 1,
       "changeable": 1,
       "ext": "AppV7Xhr"
-    },
-    {
-      "name": "📦师兄┃秒播",
-      "key": "AppV7Dsx",
-      "type": 3,
-      "api": "csp_AppV7Amns",
-      "searchable": 1,
-      "quickSearch": 1,
-      "changeable": 1,
-      "ext": "AppV7Dsx"
     },
     {
       "name": "☁️花卷┃4K",
