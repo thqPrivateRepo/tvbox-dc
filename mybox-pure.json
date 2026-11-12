@@ -122,6 +122,17 @@
       "filterable": 1
     },
     {
+      "key": "maotai",
+      "name": "茅台资源",
+      "type": 1,
+      "api": "https://caiji.maotaizy.cc/api.php/provide/vod",
+      "playUrl": "",
+      "ext": "",
+      "searchable": 1,
+      "quickSearch": 1,
+      "filterable": 1
+    },
+    {
       "key": "feifan",
       "name": "非凡资源",
       "type": 1,

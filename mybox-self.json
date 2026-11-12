@@ -1,5 +1,5 @@
 {
-  "spider": "https://gh-proxy.com/https://raw.githubusercontent.com/xiaohuya520/tvbox-dc/main/jar/sun_spider.jar;md5;a2928946eb00e5fee87663c94ae37bff",
+  "spider": "https://gh-proxy.com/https://raw.githubusercontent.com/xiaohuya520/tvbox-dc/main/jar/sun_spider.jar;md5;d2c9caaaeba20f00baac53295dbed29e",
   "sites": [
     {
       "key": "csp_Douban",
@@ -154,6 +154,17 @@
       "name": "天涯资源",
       "type": 1,
       "api": "https://tyyszy.com/api.php/provide/vod",
+      "playUrl": "",
+      "ext": "",
+      "searchable": 1,
+      "quickSearch": 1,
+      "filterable": 1
+    },
+    {
+      "key": "maotai",
+      "name": "茅台资源",
+      "type": 1,
+      "api": "https://caiji.maotaizy.cc/api.php/provide/vod",
       "playUrl": "",
       "ext": "",
       "searchable": 1,
