@@ -2223,5 +2223,10 @@
     "name": "https://www.ymaoo.cn/3049.html",
     "url": "https://www.ymaoo.cn/3049.html",
     "src": "external"
+  },
+  "https://down.fqzb204.com/?agent=1&app=ymaoo": {
+    "name": "https://down.fqzb204.com/?agent=1&app=ymaoo",
+    "url": "https://down.fqzb204.com/?agent=1&app=ymaoo",
+    "src": "external"
   }
 }
