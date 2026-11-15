@@ -2233,5 +2233,10 @@
     "name": "https://down.kq16984.com/?agent=16&app=aaa22",
     "url": "https://down.kq16984.com/?agent=16&app=aaa22",
     "src": "external"
+  },
+  "https://www.ymaoo.cn/wztag/%e7%a3%81%e5%8a%9b%e6%90%9c%e7%b4%a2": {
+    "name": "https://www.ymaoo.cn/wztag/%e7%a3%81%e5%8a%9b%e6%90%9c%e7%b4%a2",
+    "url": "https://www.ymaoo.cn/wztag/%e7%a3%81%e5%8a%9b%e6%90%9c%e7%b4%a2",
+    "src": "external"
   }
 }
