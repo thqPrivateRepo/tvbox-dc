@@ -2238,5 +2238,10 @@
     "name": "https://www.ymaoo.cn/wztag/%e7%a3%81%e5%8a%9b%e6%90%9c%e7%b4%a2",
     "url": "https://www.ymaoo.cn/wztag/%e7%a3%81%e5%8a%9b%e6%90%9c%e7%b4%a2",
     "src": "external"
+  },
+  "https://www.ymaoo.cn/wztag/%e5%a8%b1%e4%b9%90%e8%b5%84%e8%ae%af": {
+    "name": "https://www.ymaoo.cn/wztag/%e5%a8%b1%e4%b9%90%e8%b5%84%e8%ae%af",
+    "url": "https://www.ymaoo.cn/wztag/%e5%a8%b1%e4%b9%90%e8%b5%84%e8%ae%af",
+    "src": "external"
   }
 }
