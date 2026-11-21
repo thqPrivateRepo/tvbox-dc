@@ -1,5 +1,5 @@
 {
-  "spider": "http://oss4liview.moji.com/thd_file/2026/11/21/b739e258520d1aefa13a1444ee39ef0d.jpg;md5;c789e7b7a87532b61136116ab3b1541e",
+  "spider": "http://oss4liview.moji.com/thd_file/2026/11/21/2eca9460132ba7940a5098877c187e1a.jpg;md5;b7e2f9d16ff81dfe13853c6fff2e2b22",
   "sites": [
     {
       "key": "Douban",
@@ -2868,10 +2868,9 @@
       "quickSearch": 0,
       "ext": {
         "site": [
-          "https://sidhub.cc",
+          "https://seedog.cc",
           "https://seeduck.cc",
-          "https://hubdog.cc",
-          "http://104.243.25.80"
+          "https://hubdog.cc"
         ]
       },
       "timeout": 60
@@ -2926,8 +2925,8 @@
       "filterable": 1,
       "ext": {
         "site": [
-          "https://www.hdmoli.com",
-          "https://www.hdmoli.pro"
+          "https://www.hdmoli.me",
+          "https://www.hdmoli.org"
         ]
       },
       "timeout": 60
@@ -3065,12 +3064,6 @@
       "api": "csp_XingChen"
     },
     {
-      "key": "飞娱影视",
-      "name": "飞娱 • 影视",
-      "type": 3,
-      "api": "csp_Feiyu"
-    },
-    {
       "key": "旺旺影视",
       "name": "旺旺 • 影视",
       "type": 3,
@@ -3097,7 +3090,7 @@
       "searchable": 1,
       "quickSearch": 1,
       "filterable": 1,
-      "ext": "https://cz01.vip/"
+      "ext": "https://www.4kcz.com"
     },
     {
       "key": "金牌影视",
@@ -3112,13 +3105,6 @@
       "type": 3,
       "api": "csp_SaoHuo",
       "ext": "https://shdy5.us"
-    },
-    {
-      "key": "枫叶影视",
-      "name": "枫叶 • 影视",
-      "type": 3,
-      "api": "csp_FengYe",
-      "ext": "https://www.vip1949.com/"
     },
     {
       "key": "爱看机器人",
