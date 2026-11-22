@@ -1,5 +1,5 @@
 {
-  "spider": "https://aly2.tuchuangyun.top/autoupload/g1b6f/20261121/6n97/0X0/11212343.png;md5;efdb2c1d9a2e8c26e5a74ba5f53dfc56",
+  "spider": "https://aly2.tuchuangyun.top/autoupload/g1b6f/20261122/dXpY/0X0/11221706.png;md5;13a3d15bdc38794e575853c4c9b9e24e",
   "sites": [
     {
       "key": "csp_Douban",
@@ -16,7 +16,7 @@
       "name": "配置·中心",
       "type": 3,
       "api": "csp_PanConfigGuard",
-      "jar": "http://oss4liview.moji.com/thd_file/2026/11/21/2eca9460132ba7940a5098877c187e1a.jpg;md5;b7e2f9d16ff81dfe13853c6fff2e2b22",
+      "jar": "http://oss4liview.moji.com/thd_file/2026/11/23/98f6124357b913bcb47d81339ca7725a.jpg;md5;924547ec8b148216d7636beb3213b60e",
       "searchable": 0,
       "quickSearch": 0,
       "changeable": 0,
@@ -30,7 +30,7 @@
       "name": "我的·网盘",
       "type": 3,
       "api": "csp_MyPanGuard",
-      "jar": "http://oss4liview.moji.com/thd_file/2026/11/21/2eca9460132ba7940a5098877c187e1a.jpg;md5;b7e2f9d16ff81dfe13853c6fff2e2b22",
+      "jar": "http://oss4liview.moji.com/thd_file/2026/11/23/98f6124357b913bcb47d81339ca7725a.jpg;md5;924547ec8b148216d7636beb3213b60e",
       "searchable": 0,
       "quickSearch": 0,
       "changeable": 0,
