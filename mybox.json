@@ -1951,7 +1951,7 @@
     },
     {
       "key": "点我切源",
-      "name": "豆豆┃片单 <Fix所有>",
+      "name": "豆豆┃片单 <修复扫码Bug>",
       "type": 3,
       "api": "csp_DouDouGuard",
       "indexs": 1,
@@ -2768,22 +2768,6 @@
       "timeout": 60
     },
     {
-      "key": "闪电",
-      "name": "闪电 • 4K",
-      "type": 3,
-      "api": "csp_PanWebShare",
-      "searchable": 1,
-      "quickSearch": 1,
-      "filterable": 1,
-      "changeable": 1,
-      "ext": {
-        "site": [
-          "http://shandian.blog"
-        ]
-      },
-      "timeout": 60
-    },
-    {
       "key": "蜡笔",
       "name": "蜡笔 • 4K",
       "type": 3,
@@ -2798,6 +2782,23 @@
           "https://www.mmpanpan.site",
           "http://tvpanpan.site",
           "http://www.tvpanpan.site"
+        ]
+      },
+      "timeout": 60
+    },
+    {
+      "key": "闪电",
+      "name": "闪电 • 4K",
+      "type": 3,
+      "api": "csp_PanWebShare",
+      "searchable": 1,
+      "quickSearch": 1,
+      "filterable": 1,
+      "changeable": 1,
+      "ext": {
+        "site": [
+          "http://oo.sduc.site",
+          "http://sd.sduc.site"
         ]
       },
       "timeout": 60
@@ -4946,7 +4947,7 @@
       "changeable": 0
     },
     {
-      "name": "📁┃资源┃中心",
+      "name": "⚙️┃资源┃中心",
       "key": "MyAll",
       "type": 3,
       "api": "csp_MyAllAmns",
@@ -5737,6 +5738,24 @@
       "quickSearch": 1,
       "changeable": 1,
       "genre": "music"
+    },
+    {
+      "name": "🏪┃应用┃商店",
+      "key": "Store",
+      "type": 3,
+      "api": "csp_StoreAmns",
+      "searchable": 0,
+      "quickSearch": 0,
+      "changeable": 0
+    },
+    {
+      "name": "🏪┃壁纸┃商店",
+      "key": "WPbzm",
+      "type": 3,
+      "api": "csp_WPbzmAmns",
+      "searchable": 0,
+      "quickSearch": 0,
+      "changeable": 0
     },
     {
       "name": "🔍┃飞鱼┃盘搜",
