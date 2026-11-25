@@ -1,18 +1,18 @@
 {
-  "updated": "2026-11-24T02:58:07.751Z",
+  "updated": "2026-11-25T00:54:47.219Z",
   "total": 30,
   "results": [
     {
       "name": "红牛资源",
       "api": "https://hongniuzy2.com/api.php/provide/vod",
       "ok": true,
-      "count": 118518
+      "count": 118613
     },
     {
       "name": "量子资源",
       "api": "https://cj.lziapi.com/api.php/provide/vod",
       "ok": true,
-      "count": 165162
+      "count": 165370
     },
     {
       "name": "卧龙资源",
@@ -24,61 +24,61 @@
       "name": "360资源",
       "api": "https://360zyzz.com/api.php/provide/vod",
       "ok": true,
-      "count": 75664
+      "count": 75678
     },
     {
       "name": "金鹰资源",
       "api": "http://jyzyapi.com/provide/vod",
       "ok": true,
-      "count": 119096
+      "count": 119191
     },
     {
       "name": "光速资源",
       "api": "http://api.guangsuapi.com/api.php/provide/vod",
       "ok": true,
-      "count": 119109
+      "count": 119205
     },
     {
       "name": "猫眼资源",
       "api": "https://api.maoyanapi.top/api.php/provide/vod",
       "ok": true,
-      "count": 34682
+      "count": 34693
     },
     {
       "name": "鱼兔资源",
       "api": "https://apiyutu.com/api.php/provide/vod",
       "ok": true,
-      "count": 227879
+      "count": 228064
     },
     {
       "name": "奥斯卡资源",
       "api": "https://aosikazy.com/api.php/provide/vod",
       "ok": true,
-      "count": 220785
+      "count": 220882
     },
     {
       "name": "闪电资源",
       "api": "http://sdzyapi.com/api.php/provide/vod",
       "ok": true,
-      "count": 126017
+      "count": 126065
     },
     {
       "name": "暴风资源",
       "api": "https://bfzyapi.com/api.php/provide/vod",
       "ok": true,
-      "count": 173616
+      "count": 173700
     },
     {
       "name": "天涯资源",
       "api": "https://tyyszy.com/api.php/provide/vod",
       "ok": true,
-      "count": 77619
+      "count": 77663
     },
     {
       "name": "茅台资源",
       "api": "https://caiji.maotaizy.cc/api.php/provide/vod",
       "ok": true,
-      "count": 153240
+      "count": 153317
     },
     {
       "name": "樱花资源",
@@ -90,7 +90,7 @@
       "name": "非凡资源",
       "api": "https://ffzy5.tv/api.php/provide/vod",
       "ok": true,
-      "count": 99263
+      "count": 99269
     },
     {
       "name": "无尽资源",
@@ -150,7 +150,7 @@
       "name": "极速资源",
       "api": "https://jszyapi.com/api.php/provide/vod",
       "ok": true,
-      "count": 117443
+      "count": 117538
     },
     {
       "name": "豆子资源",
@@ -180,7 +180,7 @@
       "name": "快车资源",
       "api": "https://caiji.kuaichezy.org/api.php/provide/vod",
       "ok": true,
-      "count": 127626
+      "count": 127674
     }
   ]
 }
