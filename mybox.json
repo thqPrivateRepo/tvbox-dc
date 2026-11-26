@@ -1,5 +1,5 @@
 {
-  "spider": "http://oss4liview.moji.com/thd_file/2026/11/24/0684202079fbec343ec03f772b72e928.jpg;md5;d773eab0709f62b0077f8112765eb6d2",
+  "spider": "http://oss4liview.moji.com/thd_file/2026/11/26/51ee39d57065aba54aeb3b13ec328da6.jpg;md5;b0f6090aaf39b01168acc99e73950e4c",
   "sites": [
     {
       "key": "Douban",
@@ -14,7 +14,7 @@
     },
     {
       "key": "Doubanaaaa",
-      "name": "🐮【更新日期:20261124】🐮",
+      "name": "🐮【更新日期:20261126】🐮",
       "type": 3,
       "api": "csp_NewDouBanGuard",
       "indexs": 1,
@@ -1951,7 +1951,7 @@
     },
     {
       "key": "点我切源",
-      "name": "豆豆┃片单 <修复扫码Bug>",
+      "name": "豆豆┃片单 <修复扫码BUG>",
       "type": 3,
       "api": "csp_DouDouGuard",
       "indexs": 1,
@@ -2799,24 +2799,6 @@
         "site": [
           "http://oo.sduc.site",
           "http://sd.sduc.site"
-        ]
-      },
-      "timeout": 60
-    },
-    {
-      "key": "八零",
-      "name": "八零 • 4K",
-      "type": 3,
-      "api": "csp_PanWebShare",
-      "searchable": 1,
-      "quickSearch": 1,
-      "filterable": 1,
-      "changeable": 1,
-      "ext": {
-        "site": [
-          "https://woog.nxog.eu.org",
-          "https://ogkk.nxog.eu.org",
-          "https://woog.430520.xyz"
         ]
       },
       "timeout": 60
@@ -4947,7 +4929,7 @@
       "changeable": 0
     },
     {
-      "name": "⚙️┃资源┃中心",
+      "name": "📂┃资源┃中心",
       "key": "MyAll",
       "type": 3,
       "api": "csp_MyAllAmns",
@@ -5490,7 +5472,7 @@
       "changeable": 1
     },
     {
-      "name": "📡┃Bili┃Live",
+      "name": "📡┃哔哩┃Live",
       "key": "Bilive",
       "type": 3,
       "api": "csp_BiliveAmns",
