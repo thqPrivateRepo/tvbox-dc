@@ -34,28 +34,6 @@
       "filterable": 1
     },
     {
-      "key": "jinying",
-      "name": "金鹰资源",
-      "type": 1,
-      "api": "http://jyzyapi.com/provide/vod",
-      "playUrl": "",
-      "ext": "",
-      "searchable": 1,
-      "quickSearch": 1,
-      "filterable": 1
-    },
-    {
-      "key": "guangsu",
-      "name": "光速资源",
-      "type": 1,
-      "api": "http://api.guangsuapi.com/api.php/provide/vod",
-      "playUrl": "",
-      "ext": "",
-      "searchable": 1,
-      "quickSearch": 1,
-      "filterable": 1
-    },
-    {
       "key": "maoyan",
       "name": "猫眼资源",
       "type": 1,
@@ -137,17 +115,6 @@
       "name": "非凡资源",
       "type": 1,
       "api": "https://ffzy5.tv/api.php/provide/vod",
-      "playUrl": "",
-      "ext": "",
-      "searchable": 1,
-      "quickSearch": 1,
-      "filterable": 1
-    },
-    {
-      "key": "jisu",
-      "name": "极速资源",
-      "type": 1,
-      "api": "https://jszyapi.com/api.php/provide/vod",
       "playUrl": "",
       "ext": "",
       "searchable": 1,
